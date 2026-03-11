@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#451bc0",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#151121",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-primary flex items-center justify-center min-h-screen font-display p-4">
+<!-- Mobile Container Emulator -->
+<div class="relative w-full max-w-[400px] h-[800px] bg-background-light dark:bg-background-dark rounded-[3rem] overflow-hidden shadow-2xl border-[8px] border-slate-900">
+<!-- Background: Profile Screen (Dimmed) -->
+<div class="absolute inset-0 z-0">
+<!-- Profile Header -->
+<div class="h-48 bg-gradient-to-br from-primary to-indigo-800 p-6 flex flex-col justify-end">
+<div class="w-20 h-20 rounded-full border-4 border-white overflow-hidden mb-3">
+<img alt="Athlete Profile" data-alt="Close up of a professional marathon runner portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiuUKBnl-Yb9hWnRDod1tI7_0FpWx2sjiC64t97fN5VcTpwfPl4SyVOdVpZR_Nv7w-P7OBem9CoPPEO9sWC7WYgak_3JOxzLTTCc9FnPB-pzZsEcoULqYmOAZoI6o9ow7lCMGUYwhj0FAzTXP83BRC4lNyz6hAJTc2KeatBOoXxwYQk4Boi_JxyUbt0QiPI_92BBXZI7WZ6qM1QlGGAfRgDCxFWo565TADHQFK4AOMRRwkgF1UzIj-2J_vsFDQqPH4oS8SBMO9vMY"/>
+</div>
+<h1 class="text-white text-2xl font-bold">Alex Rivera</h1>
+<p class="text-white/80 text-sm">Elite Marathoner</p>
+</div>
+<!-- Profile Content Stats -->
+<div class="p-4 grid grid-cols-3 gap-3">
+<div class="bg-white p-3 rounded-xl shadow-sm text-center">
+<p class="text-primary font-bold text-lg">12</p>
+<p class="text-slate-500 text-[10px] uppercase tracking-wider">Achievements</p>
+</div>
+<div class="bg-white p-3 rounded-xl shadow-sm text-center">
+<p class="text-primary font-bold text-lg">2:45</p>
+<p class="text-slate-500 text-[10px] uppercase tracking-wider">Best Marathon</p>
+</div>
+<div class="bg-white p-3 rounded-xl shadow-sm text-center">
+<p class="text-primary font-bold text-lg">482</p>
+<p class="text-slate-500 text-[10px] uppercase tracking-wider">Followers</p>
+</div>
+</div>
+<!-- Activity List -->
+<div class="px-4 space-y-3">
+<div class="h-24 bg-white rounded-xl shadow-sm p-3 flex gap-3">
+<div class="w-16 h-16 bg-slate-100 rounded-lg"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 bg-slate-100 rounded w-3/4"></div>
+<div class="h-3 bg-slate-50 rounded w-1/2"></div>
+</div>
+</div>
+<div class="h-24 bg-white rounded-xl shadow-sm p-3 flex gap-3">
+<div class="w-16 h-16 bg-slate-100 rounded-lg"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 bg-slate-100 rounded w-3/4"></div>
+<div class="h-3 bg-slate-50 rounded w-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dimming Overlay Backdrop -->
+<div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-10"></div>
+<!-- Bottom Sheet Modal -->
+<div class="absolute inset-x-0 bottom-0 z-20 flex flex-col bg-white rounded-t-[2.5rem] shadow-2xl transition-transform duration-300">
+<!-- Drag Handle -->
+<div class="flex justify-center p-3">
+<div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+</div>
+<!-- Modal Header -->
+<div class="px-6 pt-2 pb-4">
+<h4 class="text-slate-900 text-lg font-bold text-center">Share your FLINK Profile</h4>
+</div>
+<!-- Mini Profile Card Preview -->
+<div class="px-6 mb-6">
+<div class="bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-4 flex items-center gap-4 text-white shadow-lg">
+<div class="w-14 h-14 rounded-full border-2 border-white/50 overflow-hidden shrink-0">
+<img alt="Athlete Avatar" data-alt="Portrait of a runner in marathon gear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtsXDmCaUYSPf19AZb6BIaHJtDFxAhdvVXs_oT6s56YlDyBYzof9RFMTLVSw0leGKjQG091yLECUP7eRp_bP_9DSDayfV3N25eXlOld3owb_QoOfJab4JjA6dkUpYfaoB9eq2VpLJmS4MsxoRhISogAobfLWBaH0F4SAJD7hTv7fZ3mKfu7jsc2iOfd1aqOKF7TwJU1OBevZcX8NXDR9hwsTIq0qDFG0kY6IsB0_fhFFzvzxy0YJTn7xqqFsin3C1ME5eCwaSfu04"/>
+</div>
+<div class="overflow-hidden">
+<p class="font-bold text-base truncate">Alex Rivera</p>
+<p class="text-xs text-white/90 leading-tight">Marathoner • 12 Achievements<br/>Training for Berlin 2025</p>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-white/40">qr_code_2</span>
+</div>
+</div>
+</div>
+<!-- Action List -->
+<div class="px-6 space-y-3 pb-8">
+<!-- Primary Action -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white font-bold py-4 rounded-xl shadow-md active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined">download</span>
+<span>Download PDF Snapshot</span>
+</button>
+<!-- Secondary Actions -->
+<button class="w-full flex items-center gap-3 bg-slate-100 text-slate-800 font-semibold p-4 rounded-xl active:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-primary">qr_code</span>
+<span class="text-sm">Show QR Code</span>
+</button>
+<button class="w-full flex items-center gap-3 bg-slate-100 text-slate-800 font-semibold p-4 rounded-xl active:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-primary">link</span>
+<span class="text-sm">Copy Profile Link</span>
+</button>
+<!-- Social Share Row -->
+<div class="w-full flex items-center justify-between bg-slate-100 text-slate-800 font-semibold p-4 rounded-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">share</span>
+<span class="text-sm">Share via Social</span>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-green-500 text-lg">chat</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-pink-500 text-lg">photo_camera</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-orange-600 text-lg">directions_run</span>
+</div>
+</div>
+</div>
+<!-- Close Action -->
+<button class="w-full pt-4 text-slate-400 font-semibold text-sm hover:text-slate-600 transition-colors">
+                    Cancel
+                </button>
+</div>
+<!-- Home Indicator (Safe Area) -->
+<div class="flex justify-center pb-2">
+<div class="w-32 h-1 bg-slate-900/10 rounded-full"></div>
+</div>
+</div>
+</div>
+</body></html>

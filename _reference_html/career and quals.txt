@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#451bc0",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#151121",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex justify-center">
+<!-- Mobile Container -->
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 shadow-xl min-h-screen flex flex-col relative overflow-hidden">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Athlete Profile</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-transparent text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Tabs -->
+<div class="bg-white dark:bg-slate-900 sticky top-[56px] z-10">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-6">
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 px-1" href="#">
+<p class="text-sm font-semibold">Posts</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 px-1" href="#">
+<p class="text-sm font-semibold">About</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-4 px-1" href="#">
+<p class="text-sm font-bold">Career &amp; Quals</p>
+</a>
+</div>
+</div>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto pb-24">
+<!-- Add Button Section -->
+<div class="p-4">
+<button class="w-full flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-6 py-8 hover:bg-slate-100 transition-colors group">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="text-slate-900 dark:text-slate-100 text-sm font-bold">+ Add Credential or Experience</span>
+</button>
+</div>
+<!-- Experience & Affiliations Section -->
+<div class="px-4 py-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight mb-6">Experience &amp; Affiliations</h2>
+<div class="flex flex-col gap-8">
+<!-- Item 1 -->
+<div class="relative flex gap-4 timeline-item">
+<div class="relative z-10 timeline-line">
+<div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
+<img class="w-full h-full object-cover" data-alt="Nike sports brand logo design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8DSpeFQ_Z35mHZ--AoO09JxaFHDFiG_lHCKmh9zXTOiKMbfMPhCSBCf3utYjHwlBZXTHON84pfyzRmOKl7itBOgJrKgCqaXIC7mepyke-GCC8kJac_NGpV1Rh0ir7ih5s7eNGr5plVwuacDYlAZNqfxRgvRHoBfHUcKvcpUzFfFZvnD-nmf2d0NYxEvKrOrW5oN-mXAs-FA66Nluocc1IRZn3FZpEUC3FncrgJe4NmvVYBMukh6neuect8sf5wru_mTXLLIMjU3Q"/>
+</div>
+</div>
+<div class="flex-1 min-w-0 border-b border-slate-100 dark:border-slate-800 pb-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-base leading-tight">Sponsored Athlete</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-0.5">Nike Run Club</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs mt-1">Jan 2022 - Present • 2 yrs 4 mos</p>
+</div>
+<button class="text-slate-400">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="relative flex gap-4 timeline-item">
+<div class="relative z-10 timeline-line">
+<div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
+<img class="w-full h-full object-cover" data-alt="Vertical climbing gym logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwAXpXb-sY4jJ7UpsFRKJnxWvbl3um7Y3zReVCV9urkfy0EXI4uGSAJe7gEl-Pfk7wSv5MPoQwCopgrG3dmp9hNySsCpxsSvgphUfObt-Xnv-wNV0Vp_HwslTJ2JP6m5K4gp-rxG0crxdYhO7zdcMWHTmCGFmFnH2qU-vuxeY1lDk7gMJ1bBnEXd0dDs1GRXRN4oK4YAO55qofQtJNFNoSZ-yB6rGGUR9ndwV68SqVsUg_AfAka9ZbrLHTF5qe6VhzA3sQXs0gfIg"/>
+</div>
+</div>
+<div class="flex-1 min-w-0 border-b border-slate-100 dark:border-slate-800 pb-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-base leading-tight">Lead Climbing Instructor</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-0.5">Vertical World</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs mt-1">Jun 2020 - Dec 2021 • 1 yr 7 mos</p>
+</div>
+<button class="text-slate-400">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Licenses & Certifications Section -->
+<div class="px-4 py-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight mb-4">Licenses &amp; Certifications</h2>
+<div class="flex flex-col gap-4">
+<!-- Credential 1 -->
+<div class="flex gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm relative">
+<div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-sm leading-tight">Level 2 CrossFit Trainer</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">CrossFit Inc.</p>
+<a class="inline-flex items-center gap-1 text-primary text-xs font-bold mt-2 hover:underline" href="#">
+                                        Show Credential
+                                        <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+<button class="text-slate-400 -mr-1">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Credential 2 -->
+<div class="flex gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm relative">
+<div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl">medical_services</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-sm leading-tight">Advanced Wilderness First Aid</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">NOLS (National Outdoor Leadership School)</p>
+<a class="inline-flex items-center gap-1 text-primary text-xs font-bold mt-2 hover:underline" href="#">
+                                        Show Credential
+                                        <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+<button class="text-slate-400 -mr-1">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="absolute bottom-0 w-full border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-6 pt-2 flex justify-between z-20">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">search</span>
+<p class="text-[10px] font-medium">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">person</span>
+<p class="text-[10px] font-bold">Profile</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<p class="text-[10px] font-medium">Training</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<p class="text-[10px] font-medium">Messages</p>
+</a>
+</div>
+</div>
+</body></html>

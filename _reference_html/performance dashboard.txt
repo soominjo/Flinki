@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#451bc0",
+              "background-light": "#f6f6f8",
+              "background-dark": "#151121",
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #1E1145;
+            font-family: 'Lexend', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="flex justify-center items-start min-h-screen p-0 sm:p-8">
+<!-- Mobile App Container -->
+<div class="w-full max-w-[400px] bg-white min-h-screen sm:min-h-[850px] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col relative">
+<!-- Dashboard Header -->
+<div class="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between">
+<div class="text-slate-900 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-slate-900 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">2025 Performance</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-full hover:bg-slate-100 text-slate-900 transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<!-- Filter Row -->
+<div class="flex gap-3 p-4 pt-0 overflow-x-auto no-scrollbar">
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary px-6 transition-all shadow-md shadow-primary/20">
+<p class="text-white text-sm font-semibold font-display">2025</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary/10 px-6 hover:bg-primary/20 transition-all">
+<p class="text-primary text-sm font-medium font-display">2024</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary/10 px-6 hover:bg-primary/20 transition-all">
+<p class="text-primary text-sm font-medium font-display">All-Time</p>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 overflow-y-auto no-scrollbar pb-24">
+<!-- Heatmap & Key Stats -->
+<div class="p-4">
+<div class="bg-slate-50 rounded-xl p-5 border border-slate-100 shadow-sm">
+<div class="space-y-4 mb-6">
+<div>
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Distance</p>
+<p class="text-slate-900 text-3xl font-bold font-display">1,240 <span class="text-lg font-medium text-slate-400">km</span></p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Elevation</p>
+<p class="text-slate-900 text-2xl font-bold font-display">12,000 <span class="text-sm font-medium text-slate-400">m</span></p>
+</div>
+<div>
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Active Days</p>
+<p class="text-slate-900 text-2xl font-bold font-display">142</p>
+</div>
+</div>
+</div>
+<!-- Activity Heatmap -->
+<p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-3">Activity Heatmap</p>
+<div class="grid grid-cols-12 gap-1.5">
+<!-- Simplified representation of activity dots -->
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-700"></div>
+<div class="aspect-square rounded-[2px] bg-slate-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-600"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-slate-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-800"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-600"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-slate-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-800"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-600"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-slate-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-600"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-400"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+<div class="aspect-square rounded-[2px] bg-slate-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-300"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-100"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-200"></div>
+<div class="aspect-square rounded-[2px] bg-emerald-500"></div>
+</div>
+</div>
+</div><div class="p-4 pt-0">
+<h3 class="text-slate-900 text-lg font-bold font-display mb-4">Training Load</h3>
+<div class="bg-white rounded-xl p-5 border border-slate-100 shadow-sm">
+<div class="flex justify-between items-end mb-4">
+<div>
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Weekly Relative Effort</p>
+<p class="text-slate-900 text-2xl font-bold font-display">342</p>
+</div>
+<div class="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full">
+<div class="size-2 rounded-full bg-emerald-500 animate-pulse"></div>
+<p class="text-emerald-600 text-[10px] font-bold uppercase tracking-tight">Status: Productive</p>
+</div>
+</div>
+<div class="relative h-32 w-full flex items-end justify-between gap-2 px-1">
+<!-- Optimal Zone Dashed Line -->
+<div class="absolute bottom-16 left-0 right-0 border-t-2 border-dashed border-primary/20 z-0"></div>
+<div class="absolute right-0 bottom-16 -mt-4">
+<span class="text-[8px] font-bold text-primary/40 uppercase tracking-tighter">Optimal Zone</span>
+</div>
+<!-- Bars -->
+<div class="flex-1 h-[45%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[75%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[60%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[90%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[55%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[80%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+<div class="flex-1 h-[65%] bg-gradient-to-t from-primary to-indigo-400 rounded-t-sm z-10"></div>
+</div>
+<!-- Days Label -->
+<div class="flex justify-between mt-2 px-1">
+<span class="text-[10px] font-medium text-slate-400">M</span>
+<span class="text-[10px] font-medium text-slate-400">T</span>
+<span class="text-[10px] font-medium text-slate-400">W</span>
+<span class="text-[10px] font-medium text-slate-400">T</span>
+<span class="text-[10px] font-medium text-slate-400">F</span>
+<span class="text-[10px] font-medium text-slate-400">S</span>
+<span class="text-[10px] font-medium text-slate-400">S</span>
+</div>
+</div>
+</div>
+<!-- Personal Records (PRs) -->
+<div class="p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 text-lg font-bold font-display">Personal Bests</h3>
+<span class="text-primary text-sm font-semibold">See All</span>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<!-- PR Card 1 -->
+<div class="min-w-[160px] p-[2px] rounded-xl bg-gradient-to-br from-primary via-indigo-400 to-emerald-400">
+<div class="bg-white rounded-[10px] p-4 h-full relative">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-xl">directions_run</span>
+<p class="text-slate-900 text-sm font-bold font-display">Marathon</p>
+</div>
+<p class="text-slate-900 text-xl font-bold font-display mb-1">2:55:10</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-500 text-sm fill-1">verified</span>
+<p class="text-emerald-600 text-[10px] font-bold uppercase tracking-tight">Verified</p>
+</div>
+</div>
+</div>
+<!-- PR Card 2 -->
+<div class="min-w-[160px] p-[2px] rounded-xl bg-gradient-to-br from-primary/30 to-indigo-200">
+<div class="bg-white rounded-[10px] p-4 h-full relative">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-xl">directions_run</span>
+<p class="text-slate-900 text-sm font-bold font-display">5K Run</p>
+</div>
+<p class="text-slate-900 text-xl font-bold font-display mb-1">18:42</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-500 text-sm fill-1">verified</span>
+<p class="text-emerald-600 text-[10px] font-bold uppercase tracking-tight">Verified</p>
+</div>
+</div>
+</div>
+<!-- PR Card 3 -->
+<div class="min-w-[160px] p-[2px] rounded-xl bg-gradient-to-br from-primary/30 to-indigo-200">
+<div class="bg-white rounded-[10px] p-4 h-full relative">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-xl">directions_bike</span>
+<p class="text-slate-900 text-sm font-bold font-display">100K Cycle</p>
+</div>
+<p class="text-slate-900 text-xl font-bold font-display mb-1">3:12:05</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-500 text-sm fill-1">verified</span>
+<p class="text-emerald-600 text-[10px] font-bold uppercase tracking-tight">Verified</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Gear Locker -->
+<div class="p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 text-lg font-bold font-display">Current Gear</h3>
+<button class="bg-primary/10 text-primary p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<div class="space-y-3">
+<!-- Gear Card 1 -->
+<div class="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+<div class="size-16 rounded-lg bg-slate-100 bg-center bg-cover shrink-0" data-alt="Red high performance running shoes on white background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxSpueTb3jNENJ2AVRkHsqhFdrws37wsnCGvNWQkj4pA1oMca2pxu4mi1lfAqNWKHjVHPMJPMF5eQDIcS5omLdZDjOWDUQc6TqlFHN3hAha2_cizdGvGyk48EQleMwyK7G6BsJCUJALk2gXGg7UKl2Lj3rXmViPBqRsg_XNIF2wy16A6O8VAkx6K7ICD3UP-nsbw_iTNR4x6Bu6P3FZ4PA8DSzqMKJIPMr0mJpY2CEKNQXd53Lu0KDKh5msn_x8LiiTODdC7CLJyI')"></div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 font-bold text-sm font-display truncate">Nike Alphafly 3</h4>
+<button class="text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
+<span>350km</span>
+<span>800km cap</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 43%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Gear Card 2 -->
+<div class="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+<div class="size-16 rounded-lg bg-slate-100 bg-center bg-cover shrink-0" data-alt="Pro cycling road bike side view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAo3fG7xwh6kMnSKX_vII-ji5-a2IX6XS6URlMeyg2LdLt-f1uZhNmnebSA1IbyH2SzfhSMQ0iLJ0Uy6fGnFTb6YByLXA5DjpyU--pBRZSdOhNfyw7xn23TvDQc7okRHhhHs2_ZP8Lr9jX56dAERbLSJw2QuxEfABQ9Sgz426Qn9l-MtXoWhJ6M8L0zntqFeZ7SUDUjIDSwPSs59i03IlQw7rJarV8gzlNl4MNmXWwmaT8cbEoWQZWwlf5Q3zsWkbTCv20XGcyuw8E')"></div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 font-bold text-sm font-display truncate">Specialized Tarmac SL8</h4>
+<button class="text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
+<span>1,240km</span>
+<span>5,000km cap</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 25%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Gear Card 3 -->
+<div class="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+<div class="size-16 rounded-lg bg-slate-100 bg-center bg-cover shrink-0" data-alt="Modern fitness smartwatch with silicon strap" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDp_3oVFh2vULzLkDt9cCBDBBSpcyN5uameIpQw5hM25QdOkGWwIWEVCvALYkWGNzYUkThKqLdsnRFZ2J0KbocEdQrZ8cMgbzVJ5ttyEq7QLrPCw2l4usQP7PrrwKnciASsrtxh7GB6_p944LkGR4CI4tXzHSNJQHB03puCdMbfzmQCiWTCa3E1IiXw2XI0TKiA-kFe1twclISYcHUI09ksfaiiIMaxHsSdHidm_a20ebZsKNmRlx2JtNewnEmHXe3KSGE8E1Uhw4g')"></div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-slate-900 font-bold text-sm font-display truncate">Garmin Forerunner 965</h4>
+<button class="text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
+<span>98% Battery</span>
+<span>Updated 2h ago</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full rounded-full" style="width: 98%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="absolute bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-slate-100 px-6 py-3 flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium font-display">Feed</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-[10px] font-medium font-display">Activities</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">bar_chart</span>
+<p class="text-[10px] font-bold font-display">Stats</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">backpack</span>
+<p class="text-[10px] font-medium font-display">Gear</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium font-display">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

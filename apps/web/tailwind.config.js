@@ -44,11 +44,34 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Flinki brand colors (from reference designs)
+        "primary-brand": "#451bc0",
+        "accent-blue": "#3b82f6",
+        "accent-green": "#22c55e",
+        "background-light": "#f6f6f8",
+        "background-dark": "#1E1145",
+      },
+      fontFamily: {
+        display: ["Lexend", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        slideUp: {
+          from: { transform: "translateY(100%)" },
+          to:   { transform: "translateY(0)" },
+        },
+        tabContentIn: {
+          from: { opacity: "0", transform: "translateY(2rem)" },
+          to:   { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "slide-up":    "slideUp 300ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "tab-content": "tabContentIn 300ms ease-out",
       },
     },
   },

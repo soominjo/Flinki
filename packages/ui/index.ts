@@ -27,5 +27,34 @@ export {
   CardContent,
 } from './components/ui/card'
 
+// Shadcn UI - Additional Primitives
+export { Avatar, AvatarImage, AvatarFallback } from './components/ui/avatar'
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/ui/tabs'
+export {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from './components/ui/dialog'
+export {
+  Drawer,
+  DrawerTrigger,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+} from './components/ui/drawer'
+export { Input } from './components/ui/input'
+
 // Utilities
 export { cn } from './lib/utils'

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#451bc0",
+                        "accent-blue": "#3b82f6",
+                        "accent-green": "#22c55e",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#1E1145",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .progress-ring { transform: rotate(-90deg); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display flex justify-center min-h-screen">
+<!-- Mobile App Container -->
+<div class="w-full max-w-[400px] bg-white min-h-screen shadow-2xl overflow-hidden flex flex-col">
+<!-- Header Section -->
+<header class="relative">
+<!-- Cover Photo -->
+<div class="h-44 w-full bg-slate-200 bg-cover bg-center" data-alt="Professional marathon runner in a dynamic race setting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5-AI9Qxw0ye0G1zjlwANMp2Lr5xj4BjdKVN1QUnhCUI-hh5wRbT3atBRL5qK6KtU1_pNBr_Lt4DjW-nHEQn2S-psMUX_OUqdO2ATHhR47DTXGkjo2jtjFxLQtDe8XVN3Gz6S5fnXL2YRZaSB_M60HdbhEALOCU0cSa26CX5I98H0nK1ltdFF_VEsXSYGf2R2-550lVBJ4vreO2FRQjAqsdMIcqsphvIJyUPiwCO54Br21t-RpCiF2mJzO_IR6oIBLM_LvjxWF6v8');">
+</div>
+<!-- Navigation Overlay -->
+<div class="absolute top-0 left-0 right-0 flex items-center justify-between p-4 bg-gradient-to-b from-black/40 to-transparent">
+<button class="bg-white/20 backdrop-blur-md text-white rounded-full p-2">
+<span class="material-symbols-outlined block">arrow_back</span>
+</button>
+<div class="flex gap-2">
+<button class="bg-white/20 backdrop-blur-md text-white rounded-full p-2">
+<span class="material-symbols-outlined block">settings</span>
+</button>
+</div>
+</div>
+<!-- Profile Info Overlap -->
+<div class="px-6 -mt-16 relative">
+<div class="relative inline-block">
+<div class="h-32 w-32 rounded-full border-4 border-white bg-slate-300 bg-cover bg-center shadow-lg" data-alt="Close-up portrait of Alex Carter, a young male athlete" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_tUMvNfAmUdGcQgRKvysbkAXGDINgKwmWVa4UCXxSOFqFAe_L77GdRZDnbj-y4WeHW1j2gxCK5rcAPPzB6D1B6AwiHsutWv-4iFQQ0MartZVZzelt71Cy2Ydbi8k__mJqABdKGt-O7uqtO9lcz_5p2gg3EvoN-ICO9MlyPh1i7d9adF6hoputnqXfCqsmFjsPowYVEtaYXhlKVmq5PNA1nf0an9su-Qvsmdbn4PpfS27sL7qBR54VLGwIQypArRjA25Vz9mUtyak');">
+</div>
+<div class="absolute bottom-1 right-1 h-6 w-6 bg-accent-green border-2 border-white rounded-full"></div>
+</div>
+<div class="mt-3">
+<h1 class="text-2xl font-bold text-slate-900 tracking-tight">Alex Carter</h1>
+<p class="text-slate-500 font-medium text-sm">Marathoner • Climber • Weekend Cyclist</p>
+<button class="text-primary font-semibold text-sm mt-1 hover:underline">
+                        London, UK • 142 Connections
+                    </button>
+</div>
+</div>
+</header>
+<!-- Bio & Actions -->
+<section class="px-6 mt-4">
+<p class="text-slate-600 text-[15px] leading-relaxed">
+                Passionate athlete dedicated to pushing limits across marathons, mountain peaks, and coastal cycling routes. Currently training for my next sub-3 hour marathon.
+            </p>
+<!-- Horizontal Action Buttons -->
+<div class="flex gap-3 overflow-x-auto no-scrollbar py-4 -mx-6 px-6">
+<button class="flex-none bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">send</span>
+                    Message
+                </button>
+<button class="flex-none border-2 border-slate-200 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">share</span>
+                    Share Bio
+                </button>
+<button class="flex-none border-2 border-slate-200 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    Export Snapshot PDF
+                </button>
+<button class="flex-none border-2 border-slate-200 text-slate-700 p-2.5 rounded-xl">
+<span class="material-symbols-outlined block">qr_code_2</span>
+</button>
+</div>
+</section>
+<!-- Training Progress -->
+<section class="mt-4">
+<div class="px-6 flex justify-between items-center mb-4">
+<h3 class="font-bold text-slate-900 text-lg">Currently Training For...</h3>
+</div>
+<div class="flex gap-6 overflow-x-auto no-scrollbar px-6 pb-2">
+<!-- Training Item 1 -->
+<div class="flex-none flex flex-col items-center gap-2 w-20">
+<div class="relative h-20 w-20">
+<svg class="progress-ring w-20 h-20">
+<circle class="text-slate-100" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-accent-green" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-dasharray="226" stroke-dashoffset="90" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="h-14 w-14 rounded-full bg-slate-100 bg-cover" data-alt="Icon representing Berlin Marathon" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOY9L4PkYSPpnhmhVvu1TyWPzJJRGMIkbKeSZH4AEUF688SPDfpOUGXODORefFuWgLYABZCUp64kfi7bD72hQB7tBlR4WLozmSJznAKo-QjG94JriF-wROm-bXCnKxhMadJPTlQw9zrRaX3gLCAaI56OdG-lq1kgvaFcarEDUQTadMH25rN0bc0lFjVJg2BpeP6N0tYfWuHYwmi5ymEXBd9_RfHPwNY9U5IFGii4DnZjumOAvuYFE9awekcb2vvmmI3m5j2myUm0I');"></div>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-800 text-center leading-tight">Berlin 2025</span>
+<span class="text-[10px] font-medium text-accent-green">60%</span>
+</div>
+<!-- Training Item 2 -->
+<div class="flex-none flex flex-col items-center gap-2 w-20">
+<div class="relative h-20 w-20">
+<svg class="progress-ring w-20 h-20">
+<circle class="text-slate-100" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-accent-blue" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-dasharray="226" stroke-dashoffset="150" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="h-14 w-14 rounded-full bg-slate-100 bg-cover" data-alt="Icon representing Mont Blanc climb" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1RnhtcfAipN-U_5YDF2fw-aXclew3FZkZbiXlgJdxWRbwvds7etqTQTzoEaG8TyUEzIBnoWZQoh0xKk4_-WSAznjVwXYBP4xgLcBms2HPkLNVo37vwUmWoWyJApzVfxDmZSTpGkUpWnkDVz989S0pLEWJz1gLsNQGcpOvEntypR5D1rVZcCYJQRMG0zuvKBl0djtoFjwpc6d_TvySJOyfeugu4HPy6_JfbCJ6b1qrKhXx8u7WB83N75bPshbA65zu1YIghGfqly0');"></div>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-800 text-center leading-tight">Mont Blanc</span>
+<span class="text-[10px] font-medium text-accent-blue">35%</span>
+</div>
+<!-- Add More -->
+<div class="flex-none flex flex-col items-center gap-2 w-20">
+<button class="h-20 w-20 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<span class="text-[10px] font-bold text-slate-400">Add Goal</span>
+</div>
+</div>
+</section>
+<!-- Albums -->
+<section class="mt-8">
+<div class="px-6 flex justify-between items-end mb-4">
+<h3 class="font-bold text-slate-900 text-lg">Albums</h3>
+<button class="text-primary text-sm font-semibold">Show all photos</button>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar px-6 pb-2">
+<div class="flex-none text-center">
+<div class="h-16 w-16 rounded-full ring-2 ring-primary ring-offset-2 bg-primary flex items-center justify-center mb-1 overflow-hidden">
+<span class="text-white text-xs font-bold">All</span>
+</div>
+<span class="text-[10px] font-semibold text-slate-900">All</span>
+</div>
+<div class="flex-none text-center">
+<div class="h-16 w-16 rounded-full bg-slate-200 bg-cover bg-center mb-1 ring-2 ring-transparent hover:ring-primary ring-offset-2 transition-all" data-alt="Cycling thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8CfSvo0o5qytfGI1Rf5jmSE0bQ1t9ZAM4hruGHea5RM7W5CfDqpRRq5OyRE4Aems4dh876g-w8H3aPLNsWIyXU_LZxaJMOaI7OlR854JR6sPthCQPDflA0J8z7CRpI2zZvrFlm0x_d2IPSUW9ha-msggXOM2JzTNEniAQcxnE_aS0HikmVaf8oM-9STRw4pVqVG1hBEQO29btQR4PUIZ77sDruhTuIRgE8ZhFiF0oraJC-5pYlvPuAuDikfCleD1FHcEc6zwRgwI');"></div>
+<span class="text-[10px] font-semibold text-slate-500">Cycling</span>
+</div>
+<div class="flex-none text-center">
+<div class="h-16 w-16 rounded-full bg-slate-200 bg-cover bg-center mb-1 ring-2 ring-transparent hover:ring-primary ring-offset-2 transition-all" data-alt="Running thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmg50KJrzmN7A0sS-8227moD1imNjtswLMcV_oNacQzUE-ePWPZW_jHXi-unwtq1_XuZy4e-a56XAk1cJ9ujVgTLevJ4P4TjTJGj5usra7jalDarMw0pqzATd-J1vFDVi_JVu4YkPOSE4Vr2PVtDlg3eRFNDEArDpLwD5uQYY-sBx-mlZ2k9uURvwzf755S1YMfujvE99yCjvACJlXKcUUC4NZ_KRJWs8bRHzVl_lgBfGOhoVc60m_dgHdvrTOPuK7WcWhpnKZPWk');"></div>
+<span class="text-[10px] font-semibold text-slate-500">Running</span>
+</div>
+<div class="flex-none text-center">
+<div class="h-16 w-16 rounded-full bg-slate-200 bg-cover bg-center mb-1 ring-2 ring-transparent hover:ring-primary ring-offset-2 transition-all" data-alt="Climbing thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3IuJmXBLVZqZi2wnvMYe78f5qtZrMDn3s23pYCajkia0bsWFiMRDhN6CF6vS_hDzd1kiGmsSLMkm0RorbmLu6FiL3QHOUSE57oaKQN1MKG1Cyovh__sWC_Fh7U5f1n7kMELLDYdW25SIOX3ESXaRymyQXiScSZeJ8zyT6JaM2Dxa6m6yEvWZXPeSQtaorghkl2M8_Gk-bW8sqqMnITxRUYjxTVUWbGHugFxap3iOldDikwfUnHkOl181o46dQ-bM6qMFY3g58v74');"></div>
+<span class="text-[10px] font-semibold text-slate-500">Climbing</span>
+</div>
+</div>
+</section>
+<!-- Tabbed Content Section -->
+<section class="mt-8 flex-1">
+<div class="sticky top-0 bg-white z-10 border-b border-slate-100">
+<div class="flex justify-around">
+<button class="py-4 px-2 border-b-2 border-primary text-primary font-bold text-sm">Achievements</button>
+<button class="py-4 px-2 border-b-2 border-transparent text-slate-400 font-semibold text-sm">Career &amp; Quals</button>
+<button class="py-4 px-2 border-b-2 border-transparent text-slate-400 font-semibold text-sm">Activities</button>
+</div>
+</div>
+<!-- Achievements List -->
+<div class="p-6 space-y-4">
+<!-- Card 1 -->
+<div class="flex items-center gap-4 bg-background-light p-4 rounded-2xl">
+<div class="h-12 w-12 rounded-xl bg-white shadow-sm flex items-center justify-center overflow-hidden">
+<img alt="Marathon logo" class="h-10 w-10 object-contain" data-alt="Iconic marathon logo graphic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1mgoo9ZBbGsGVEDzBJypdNYev8ZyhHXmhvn9Cc63Zqe_3EohVtTTZZfB3gBxWNtlj6pK2s5_UzZ-wm2JkT0FmdHz5pw7ZCEnXXiyPWdTSa5yF2HLiX8jTM8akn_ZeOEVGZAMG4_KkaDox6rT2wPEyOugn_jA3lFMW7j0s7eCCfsGrth6OEMNzM-VOjYdqHoYPSo4hsiZu2mchnBXIer1bSb5NSqlG45ouSYQCVedbfRvEwnDELwpdXq4YzOGxOvmkCJ9s24QUinU"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 text-sm">London Marathon Finisher</h4>
+<p class="text-xs text-slate-500">October 2024</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<button class="text-slate-400">
+<span class="material-symbols-outlined block text-lg">more_vert</span>
+</button>
+<button class="text-primary text-[10px] font-bold hover:underline">...see more</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex items-center gap-4 bg-background-light p-4 rounded-2xl">
+<div class="h-12 w-12 rounded-xl bg-white shadow-sm flex items-center justify-center overflow-hidden">
+<img alt="Trail race logo" class="h-10 w-10 object-contain" data-alt="Trail running race logo badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARsr1DvIhblreOU3lRTh8gLMipYTj65M8_fwyzvfm5oxUvH3Of0LxnzuUr1yUn8NqODEsaTh_ZNxf9Z0R_wLTdZ-anNUzQuTePqFd-JYpM9gt-ZjyQIGz9e5kAKqRwABIAvg8-hni8J_WjLPLl59Do4Vaep5sUfnPNJX1o_2B6ZYWuKg_a26jjkzLb5xKF5FK1mqbdKBf22lIqn1d-vmKG0RMAInRpXP4MEp8ph3L71137n172fxri6-IAzO0GmkT88m2Y-gTesSY"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 text-sm">UTMB 50K Finisher</h4>
+<p class="text-xs text-slate-500">August 2023</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<button class="text-slate-400">
+<span class="material-symbols-outlined block text-lg">more_vert</span>
+</button>
+<button class="text-primary text-[10px] font-bold hover:underline">...see more</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex items-center gap-4 bg-background-light p-4 rounded-2xl">
+<div class="h-12 w-12 rounded-xl bg-white shadow-sm flex items-center justify-center overflow-hidden">
+<img alt="Climbing certification" class="h-10 w-10 object-contain" data-alt="Mountain climbing certification emblem" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArjM4DYQiW5UI-3ZlfVH0E8EJWyhiTi1xGK3mFptUItMtyMYjkaN3E19-1p9oz0wQb3haj-lrg7RxqmUpxmE2CW1Ff9sFn-092rr1HjDZkWjZqDrKWbL75ZnXk21evtfY-BFxXtqKrhZYH8MxCBIEoarj3zF1StCTpbCVVE-4iIpbo5NFY3U3CERMVx1AiCoL-cU1AhudRpJ-a5uWlZy2E5GRkXOsDPFeHEBaYHM3wno3duV7CTi2jfGT4iFBPlaM5xw9TU_DVudE"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 text-sm">Lead Climbing Level 2</h4>
+<p class="text-xs text-slate-500">June 2023</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<button class="text-slate-400">
+<span class="material-symbols-outlined block text-lg">more_vert</span>
+</button>
+<button class="text-primary text-[10px] font-bold hover:underline">...see more</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation (As requested by component library) -->
+<nav class="border-t border-slate-100 bg-white px-6 pb-6 pt-3 flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined block">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined block">explore</span>
+<span class="text-[10px] font-bold">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<div class="bg-primary h-12 w-12 rounded-full flex items-center justify-center -mt-8 shadow-lg shadow-primary/40 text-white">
+<span class="material-symbols-outlined block text-3xl">add</span>
+</div>
+<span class="text-[10px] font-bold">Train</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined block">insights</span>
+<span class="text-[10px] font-bold">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-900 font-bold" href="#">
+<span class="material-symbols-outlined block fill-1">person</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

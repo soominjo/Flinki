@@ -84,27 +84,16 @@ body {
   min-height: 100vh;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Hide scrollbar for pill rows while keeping scroll behavior */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.logo {
-  height: 5em;
-  padding: 1em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em hsl(var(--primary) / 0.5));
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-a {
-  font-weight: 500;
-  color: hsl(var(--primary));
-  text-decoration: inherit;
-}
-a:hover {
-  text-decoration: underline;
-}
+.progress-ring { transform: rotate(-90deg); }
