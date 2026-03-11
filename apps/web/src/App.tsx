@@ -9,7 +9,7 @@ import { ActivitiesFeed } from './features/activities/ActivitiesFeed'
 import type { ActivityPost } from './features/activities/ActivitiesFeed'
 import { CareerTimeline } from './features/career/CareerTimeline'
 import type { ExperienceItem, Certification } from './features/career/CareerTimeline'
-import { ShareModal } from './features/shared/ShareModal'
+import { ShareModal, type ShareModalView } from './features/shared/ShareModal'
 import { AddAchievementModal } from './features/achievements/AddAchievementModal'
 import { PerformanceDashboard } from './features/stats/PerformanceDashboard'
 import type { YearStats } from './features/stats/PerformanceDashboard'
@@ -121,6 +121,9 @@ const mockExperience: ExperienceItem[] = [
     role: 'Sponsored Athlete',
     organization: 'Nike Run Club',
     dateRange: 'Jan 2022 - Present • 2 yrs 4 mos',
+    location: 'Global',
+    description:
+      'Selected as 1 of 12 NRC Elite athletes globally. Lead community pace groups at flagship events, develop personalised training plans for 500+ members, and represent the brand at major World Marathon Majors including Boston, London, and Tokyo.',
     logoUrl:
       'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=150&h=150',
   },
@@ -129,6 +132,9 @@ const mockExperience: ExperienceItem[] = [
     role: 'Lead Climbing Instructor',
     organization: 'Vertical World',
     dateRange: 'Jun 2020 - Dec 2021 • 1 yr 7 mos',
+    location: 'Seattle, WA',
+    description:
+      'Designed and delivered progressive lead climbing curricula for beginner to advanced groups. Certified 48 students in top-rope and lead belay techniques. Maintained a flawless safety record across 300+ sessions and grew the adult programme by 40%.',
     logoUrl:
       'https://images.unsplash.com/photo-1560264280-08b166ce6ba2?auto=format&fit=crop&q=80&w=150&h=150',
   },
@@ -140,12 +146,20 @@ const mockCertifications: Certification[] = [
     title: 'Level 2 CrossFit Trainer',
     issuer: 'CrossFit Inc.',
     icon: 'verified_user',
+    issuedDate: 'Jan 2023',
+    expiresDate: 'Jan 2026',
+    status: 'active',
+    credentialId: 'CF-L2-2023-07842',
   },
   {
     id: 'cert-2',
     title: 'Advanced Wilderness First Aid',
-    issuer: 'NOLS (National Outdoor Leadership School)',
+    issuer: 'NOLS — National Outdoor Leadership School',
     icon: 'medical_services',
+    issuedDate: 'Mar 2022',
+    expiresDate: 'Mar 2025',
+    status: 'active',
+    credentialId: 'NOLS-WFA-2022-11293',
     imageUrl:
       'https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&q=80&w=150&h=150',
   },
@@ -278,7 +292,7 @@ export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('Achievements')
   const [selectedAlbumId, setSelectedAlbumId] = useState('all')
   const [isShareOpen, setIsShareOpen] = useState(false)
-  const [shareInitialView, setShareInitialView] = useState<'options' | 'qr'>('options')
+  const [shareInitialView, setShareInitialView] = useState<ShareModalView>('options')
   const [isAddOpen, setIsAddOpen] = useState(false)
   const tabsRef = useRef<HTMLDivElement>(null)
 
@@ -488,6 +502,12 @@ export function App() {
         avatarUrl={mockUser.avatarUrl}
         tagline={`${mockUser.tags.join(' • ')} • ${mockAchievements.length} Achievements`}
         trainingFor={`Training for ${mockTrainingGoals[0]?.title}`}
+        topAchievement={{
+          title: mockAchievements[0].title,
+          result: '2:58:32',
+          imageUrl: mockAchievements[0].imageUrl,
+          icon: mockAchievements[0].icon,
+        }}
       />
 
       <AddAchievementModal

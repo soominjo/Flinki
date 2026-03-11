@@ -4,9 +4,9 @@ import type { Achievement } from '../../lib/mockData'
 // Trust Layer System — all 6 layers, each with a distinct visual identity
 // ---------------------------------------------------------------------------
 
-type TrustLayer = 1 | 2 | 3 | 4 | 5 | 6
+export type TrustLayer = 1 | 2 | 3 | 4 | 5 | 6
 
-interface TrustLayerConfig {
+export interface TrustLayerConfig {
   label: string
   sublabel: string
   icon: string // Material Symbol name
@@ -24,7 +24,7 @@ interface TrustLayerConfig {
   valueColor: string
 }
 
-const TRUST_LAYERS: Record<TrustLayer, TrustLayerConfig> = {
+export const TRUST_LAYERS: Record<TrustLayer, TrustLayerConfig> = {
   1: {
     label: 'Self-Reported',
     sublabel: 'Claimed by the athlete',
@@ -97,7 +97,13 @@ const TRUST_LAYERS: Record<TrustLayer, TrustLayerConfig> = {
 // TrustLayerBadge — the reusable badge chip for a given layer
 // ---------------------------------------------------------------------------
 
-function TrustLayerBadge({ layer, showLabel = true }: { layer: TrustLayer; showLabel?: boolean }) {
+export function TrustLayerBadge({
+  layer,
+  showLabel = true,
+}: {
+  layer: TrustLayer
+  showLabel?: boolean
+}) {
   const c = TRUST_LAYERS[layer]
   return (
     <span
@@ -146,7 +152,7 @@ function TrustLegend() {
 // Ordered: highest trust layer first (L6 → L5 → L4 → L3 → L2 → L1)
 // ---------------------------------------------------------------------------
 
-interface EvidenceItem {
+export interface EvidenceItem {
   id: string
   layer: TrustLayer
   /** Content-specific icon (may differ from the layer icon) */
@@ -158,7 +164,7 @@ interface EvidenceItem {
   imageUrl?: string
 }
 
-const EVIDENCE: Record<string, EvidenceItem[]> = {
+export const EVIDENCE: Record<string, EvidenceItem[]> = {
   'ach-1': [
     {
       id: 'e1-1',
