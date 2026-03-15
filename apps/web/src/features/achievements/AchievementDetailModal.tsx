@@ -48,8 +48,8 @@ export const TRUST_LAYERS: Record<TrustLayer, TrustLayerConfig> = {
     valueColor: 'text-violet-700 dark:text-violet-400',
   },
   3: {
-    label: 'Device Data',
-    sublabel: 'GPS or sensor verified',
+    label: 'Activity Log',
+    sublabel: 'Logged natively in Flinki',
     icon: 'watch',
     pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400',
     nodeBg: 'bg-blue-100 dark:bg-blue-900/50',
@@ -199,14 +199,14 @@ export const EVIDENCE: Record<string, EvidenceItem[]> = {
       icon: 'directions_run',
       title: 'Brighton Half Marathon',
       value: '1:24:18',
-      detail: '6 weeks prior · Qualifying standard achieved · Garmin-verified',
+      detail: '6 weeks prior · Qualifying standard achieved',
       date: 'Mar 10, 2024',
     },
     {
       id: 'e1-4',
       layer: 3,
       icon: 'watch',
-      title: 'Garmin Training Log',
+      title: 'Flinki Training Log',
       value: '487 km total',
       detail: '16-week build · Avg 4.2 runs/week · Longest run: 32 km',
       date: 'Jan – Apr 2024',
@@ -245,8 +245,8 @@ export const EVIDENCE: Record<string, EvidenceItem[]> = {
     {
       id: 'e2-3',
       layer: 3,
-      icon: 'watch',
-      title: 'Garmin Fenix 7X Activity',
+      icon: 'route',
+      title: 'Flinki Training Log',
       value: '52 km · 3,100 m ↑',
       detail: '9 h 41 m active · Avg HR 148 bpm · 4,200 kcal',
       date: 'Aug 30, 2024',
@@ -266,7 +266,7 @@ export const EVIDENCE: Record<string, EvidenceItem[]> = {
       icon: 'photo_library',
       title: 'Summit Photo — Col de Voza',
       value: '1 photo',
-      detail: '2,026 m elevation · GPS geotagged',
+      detail: '2,026 m elevation · Captured at race checkpoint',
       date: 'Aug 30, 2024',
       imageUrl:
         'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=85&w=1080&h=720',
@@ -295,9 +295,9 @@ export const EVIDENCE: Record<string, EvidenceItem[]> = {
       id: 'e3-3',
       layer: 3,
       icon: 'fitness_center',
-      title: 'Apple Health Workouts',
+      title: 'Flinki Training Log',
       value: '30 sessions',
-      detail: 'Avg 62 min/session · Finger training + outdoor sends · Synced via Health app',
+      detail: 'Avg 62 min/session · Finger training + outdoor sends · Logged on Flinki',
       date: 'Apr 20 – May 20, 2024',
     },
     {
@@ -377,7 +377,7 @@ export function AchievementDetailModal({ achievement, onClose }: AchievementDeta
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-modal flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={onClose}
       aria-hidden="true"
     >

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { showToast } from '../shared/Toaster'
 
 interface AddCredentialModalProps {
   isOpen: boolean
@@ -9,18 +10,44 @@ interface AddCredentialModalProps {
 const MOCK_LOGO_URL =
   'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=120&h=120&q=80'
 
+const fieldClass =
+  'bg-slate-100 dark:bg-slate-800 rounded-xl p-3 w-full border-none outline-none text-sm ' +
+  'text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 ' +
+  'focus:ring-2 focus:ring-primary-brand'
+
 export function AddCredentialModal({ isOpen, onClose }: AddCredentialModalProps) {
   const [hasImage, setHasImage] = useState(false)
+  const [title, setTitle] = useState('')
+  const [organization, setOrganization] = useState('')
+  const [dateRange, setDateRange] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
+
+  const canSave = title.trim().length > 0 && organization.trim().length > 0
 
   useEffect(() => {
-    if (!isOpen) setHasImage(false)
+    if (!isOpen) {
+      setHasImage(false)
+      setTitle('')
+      setOrganization('')
+      setDateRange('')
+      setIsSaving(false)
+    }
   }, [isOpen])
+
+  function handleSave() {
+    if (!canSave || isSaving) return
+    setIsSaving(true)
+    setTimeout(() => {
+      showToast('Credential added to your profile!')
+      onClose()
+    }, 1000)
+  }
 
   if (!isOpen) return null
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-overlay bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in duration-200"
       onClick={onClose}
       aria-hidden="true"
     >
@@ -87,27 +114,45 @@ export function AddCredentialModal({ isOpen, onClose }: AddCredentialModalProps)
         <div className="space-y-4 mt-4">
           <input
             placeholder="Title (e.g., Lead Instructor)"
-            className="bg-slate-100 dark:bg-slate-800 rounded-xl p-3 w-full border-none outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            className={fieldClass}
+            value={title}
+            onChange={e => setTitle(e.target.value)}
           />
           <input
             placeholder="Organization / Company"
-            className="bg-slate-100 dark:bg-slate-800 rounded-xl p-3 w-full border-none outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            className={fieldClass}
+            value={organization}
+            onChange={e => setOrganization(e.target.value)}
           />
           <input
-            placeholder="MM/YYYY - Present"
-            className="bg-slate-100 dark:bg-slate-800 rounded-xl p-3 w-full border-none outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            placeholder="MM/YYYY – Present"
+            className={fieldClass}
+            value={dateRange}
+            onChange={e => setDateRange(e.target.value)}
           />
         </div>
 
         <button
           type="button"
-          className="w-full mt-6 bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/90 transition-colors"
-          onClick={() => {
-            alert('Credential successfully added!')
-            onClose()
-          }}
+          className={[
+            'w-full mt-6 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2',
+            canSave
+              ? 'bg-primary-brand text-white hover:bg-primary-brand/90 shadow-lg shadow-primary-brand/20'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed',
+          ].join(' ')}
+          onClick={handleSave}
+          disabled={!canSave || isSaving}
         >
-          Save Credential
+          {isSaving ? (
+            <>
+              <span className="material-symbols-outlined text-xl animate-spin">
+                progress_activity
+              </span>
+              Saving...
+            </>
+          ) : (
+            'Save Credential'
+          )}
         </button>
       </div>
     </div>,

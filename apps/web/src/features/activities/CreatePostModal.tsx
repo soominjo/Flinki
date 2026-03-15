@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { showToast } from '../shared/Toaster'
 
 // ---------------------------------------------------------------------------
 // Post targets — goals and achievements the user can link a post to
@@ -57,7 +58,7 @@ export const MOCK_TARGETS: PostTarget[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Credibility layers: Gray → Blue → Green
+// Credibility layers: L1 → L2 → L3 → L4
 // ---------------------------------------------------------------------------
 
 interface CredibilityLayer {
@@ -69,9 +70,10 @@ interface CredibilityLayer {
   badgeBg: string
   badgeText: string
   barWidth: string
+  nudge: string
 }
 
-const CREDIBILITY_LAYERS: Record<1 | 2 | 4, CredibilityLayer> = {
+const CREDIBILITY_LAYERS: Record<1 | 2 | 3 | 4, CredibilityLayer> = {
   1: {
     id: 1,
     label: 'Self-Reported',
@@ -81,6 +83,7 @@ const CREDIBILITY_LAYERS: Record<1 | 2 | 4, CredibilityLayer> = {
     badgeBg: 'bg-slate-200 dark:bg-slate-700',
     badgeText: 'text-slate-600 dark:text-slate-300',
     barWidth: '20%',
+    nudge: 'Add photos, detailed notes, or tag a partner to increase trust.',
   },
   2: {
     id: 2,
@@ -91,6 +94,18 @@ const CREDIBILITY_LAYERS: Record<1 | 2 | 4, CredibilityLayer> = {
     badgeBg: 'bg-blue-100 dark:bg-blue-900/50',
     badgeText: 'text-blue-700 dark:text-blue-300',
     barWidth: '55%',
+    nudge: 'Nice! Tag a training partner to reach the highest trust level.',
+  },
+  3: {
+    id: 3,
+    label: 'Device Data',
+    icon: 'watch',
+    barColor: 'bg-sky-500',
+    textColor: 'text-sky-600 dark:text-sky-400',
+    badgeBg: 'bg-sky-100 dark:bg-sky-900/50',
+    badgeText: 'text-sky-700 dark:text-sky-300',
+    barWidth: '75%',
+    nudge: 'Almost there! Tag a training partner to reach the highest trust level.',
   },
   4: {
     id: 4,
@@ -101,6 +116,7 @@ const CREDIBILITY_LAYERS: Record<1 | 2 | 4, CredibilityLayer> = {
     badgeBg: 'bg-emerald-100 dark:bg-emerald-900/50',
     badgeText: 'text-emerald-700 dark:text-emerald-300',
     barWidth: '100%',
+    nudge: 'Max trust reached! Your post carries full peer-verified credibility.',
   },
 }
 
@@ -111,7 +127,7 @@ const CREDIBILITY_LAYERS: Record<1 | 2 | 4, CredibilityLayer> = {
 interface CreatePostModalProps {
   isOpen: boolean
   onClose: () => void
-  onPost?: (text: string, targetId: string) => void
+  onPost?: (text: string, targetIds: string[], visibility: 'public' | 'private') => void
   currentUserAvatarUrl?: string
 }
 
@@ -122,29 +138,51 @@ export function CreatePostModal({
   currentUserAvatarUrl,
 }: CreatePostModalProps) {
   const [text, setText] = useState('')
-  const [selectedTarget, setSelectedTarget] = useState<PostTarget | null>(null)
+  const [selectedTargets, setSelectedTargets] = useState<PostTarget[]>([])
   const [showTargetPicker, setShowTargetPicker] = useState(false)
   const [hasPhoto, setHasPhoto] = useState(false)
   const [taggedPartner, setTaggedPartner] = useState<string | null>(null)
+  const [visibility, setVisibility] = useState<'public' | 'private'>('public')
+  const [isSaving, setIsSaving] = useState(false)
 
-  const currentLayerKey: 1 | 2 | 4 = taggedPartner ? 4 : hasPhoto ? 2 : 1
+  const currentLayerKey: 1 | 2 | 3 | 4 = taggedPartner ? 4 : hasPhoto ? 2 : 1
   const layer = CREDIBILITY_LAYERS[currentLayerKey]
 
-  const canPost = text.trim().length > 0 && selectedTarget !== null
+  const canPost = text.trim().length > 0 && selectedTargets.length > 0
+
+  function toggleTarget(target: PostTarget) {
+    setSelectedTargets(prev =>
+      prev.some(t => t.id === target.id) ? prev.filter(t => t.id !== target.id) : [...prev, target]
+    )
+  }
+
+  function removeTarget(id: string) {
+    setSelectedTargets(prev => prev.filter(t => t.id !== id))
+  }
 
   function handlePost() {
-    if (!canPost) return
-    onPost?.(text.trim(), selectedTarget!.id)
-    resetState()
-    onClose()
+    if (!canPost || isSaving) return
+    setIsSaving(true)
+    setTimeout(() => {
+      onPost?.(
+        text.trim(),
+        selectedTargets.map(t => t.id),
+        visibility
+      )
+      showToast('Post shared!')
+      resetState()
+      onClose()
+    }, 800)
   }
 
   function resetState() {
     setText('')
-    setSelectedTarget(null)
+    setSelectedTargets([])
     setShowTargetPicker(false)
     setHasPhoto(false)
     setTaggedPartner(null)
+    setVisibility('public')
+    setIsSaving(false)
   }
 
   function handleClose() {
@@ -157,7 +195,7 @@ export function CreatePostModal({
   return (
     /* Backdrop */
     <div
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center"
+      className="fixed inset-0 z-modal bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center"
       onClick={handleClose}
       aria-modal="true"
       role="dialog"
@@ -203,7 +241,7 @@ export function CreatePostModal({
         {/* ── Scrollable body ── */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-4">
-            {/* ── Task 2: Target Goal Selector (prominent, required) ── */}
+            {/* ── Task 4.1: Multi-Target Selector ── */}
             <div>
               <div className="flex items-center gap-1.5 mb-2">
                 <span className="material-symbols-outlined text-[14px] text-primary-brand">
@@ -215,34 +253,51 @@ export function CreatePostModal({
                 </p>
               </div>
 
-              {selectedTarget ? (
-                /* Selected chip */
-                <button
-                  type="button"
-                  onClick={() => setShowTargetPicker(true)}
-                  className="w-full flex items-center gap-3 rounded-2xl border-2 border-primary-brand/30 bg-primary-brand/5 dark:bg-primary-brand/10 px-4 py-3 text-left hover:border-primary-brand/50 transition-colors"
-                >
-                  <div
-                    className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${selectedTarget.iconBg}`}
-                  >
-                    <span
-                      className={`material-symbols-outlined text-[20px] ${selectedTarget.iconColor}`}
+              {selectedTargets.length > 0 ? (
+                /* Selected chips row + Add button */
+                <div className="flex items-center gap-2 flex-wrap">
+                  {selectedTargets.map(target => (
+                    <div
+                      key={target.id}
+                      className="flex items-center gap-1.5 rounded-xl border border-primary-brand/30 bg-primary-brand/5 dark:bg-primary-brand/10 pl-2 pr-1 py-1.5"
                     >
-                      {selectedTarget.icon}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                      {selectedTarget.label}
-                    </p>
-                    <p className="text-[10px] text-slate-400 capitalize">{selectedTarget.type}</p>
-                  </div>
-                  <span className="material-symbols-outlined text-[18px] text-slate-400 shrink-0">
-                    expand_more
-                  </span>
-                </button>
+                      <div
+                        className={`h-5 w-5 rounded-md flex items-center justify-center shrink-0 ${target.iconBg}`}
+                      >
+                        <span
+                          className={`material-symbols-outlined text-[11px] ${target.iconColor}`}
+                        >
+                          {target.icon}
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-800 dark:text-white max-w-[120px] truncate">
+                        {target.label}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeTarget(target.id)}
+                        className="ml-0.5 opacity-50 hover:opacity-100 transition-opacity"
+                        aria-label={`Remove ${target.label}`}
+                      >
+                        <span className="material-symbols-outlined text-[13px] text-slate-500 dark:text-slate-400">
+                          close
+                        </span>
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add another target */}
+                  <button
+                    type="button"
+                    onClick={() => setShowTargetPicker(true)}
+                    className="flex items-center gap-1 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 px-2.5 py-1.5 text-[11px] font-bold text-slate-400 hover:border-primary-brand hover:text-primary-brand hover:bg-primary-brand/5 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[13px]">add</span>
+                    Add
+                  </button>
+                </div>
               ) : (
-                /* Prompt */
+                /* Empty prompt */
                 <button
                   type="button"
                   onClick={() => setShowTargetPicker(true)}
@@ -264,23 +319,36 @@ export function CreatePostModal({
                 </button>
               )}
 
-              {/* Target picker dropdown */}
+              {/* Target picker dropdown — stays open for multi-select */}
               {showTargetPicker && (
                 <div className="mt-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden">
                   <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      Select Target
+                      Select Targets
+                      {selectedTargets.length > 0 && (
+                        <span className="ml-1.5 bg-primary-brand text-white text-[8px] font-black px-1.5 py-0.5 rounded-full">
+                          {selectedTargets.length}
+                        </span>
+                      )}
                     </p>
                     <button
                       type="button"
                       onClick={() => setShowTargetPicker(false)}
-                      className="text-slate-400 hover:text-slate-600"
+                      className={[
+                        'text-sm font-bold transition-colors',
+                        selectedTargets.length > 0
+                          ? 'text-primary-brand hover:text-primary-brand/80'
+                          : 'text-slate-400 hover:text-slate-600',
+                      ].join(' ')}
                     >
-                      <span className="material-symbols-outlined text-[16px]">close</span>
+                      {selectedTargets.length > 0 ? (
+                        'Done'
+                      ) : (
+                        <span className="material-symbols-outlined text-[16px]">close</span>
+                      )}
                     </button>
                   </div>
 
-                  {/* Goals */}
                   <div className="p-2">
                     <p className="px-3 py-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest">
                       Active Goals
@@ -289,11 +357,8 @@ export function CreatePostModal({
                       <TargetOption
                         key={target.id}
                         target={target}
-                        isSelected={selectedTarget?.id === target.id}
-                        onSelect={() => {
-                          setSelectedTarget(target)
-                          setShowTargetPicker(false)
-                        }}
+                        isSelected={selectedTargets.some(t => t.id === target.id)}
+                        onSelect={() => toggleTarget(target)}
                       />
                     ))}
 
@@ -304,11 +369,8 @@ export function CreatePostModal({
                       <TargetOption
                         key={target.id}
                         target={target}
-                        isSelected={selectedTarget?.id === target.id}
-                        onSelect={() => {
-                          setSelectedTarget(target)
-                          setShowTargetPicker(false)
-                        }}
+                        isSelected={selectedTargets.some(t => t.id === target.id)}
+                        onSelect={() => toggleTarget(target)}
                       />
                     ))}
                   </div>
@@ -328,7 +390,65 @@ export function CreatePostModal({
               />
             </div>
 
-            {/* ── Task 3: Live Credibility Meter ── */}
+            {/* ── Task 4.2: Visibility Controls ── */}
+            <div>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span className="material-symbols-outlined text-[14px] text-slate-400">
+                  visibility
+                </span>
+                <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Visibility
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {/* Public */}
+                <button
+                  type="button"
+                  onClick={() => setVisibility('public')}
+                  className={[
+                    'flex flex-col items-start gap-1 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-200',
+                    visibility === 'public'
+                      ? 'border-primary-brand bg-primary-brand text-white'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary-brand/40',
+                  ].join(' ')}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[15px]">public</span>
+                    <span className="text-[12px] font-bold">Public Post</span>
+                  </div>
+                  <span
+                    className={`text-[10px] leading-tight ${visibility === 'public' ? 'text-white/70' : 'text-slate-400 dark:text-slate-500'}`}
+                  >
+                    Feed + Waterfall
+                  </span>
+                </button>
+
+                {/* Private */}
+                <button
+                  type="button"
+                  onClick={() => setVisibility('private')}
+                  className={[
+                    'flex flex-col items-start gap-1 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-200',
+                    visibility === 'private'
+                      ? 'border-slate-700 dark:border-slate-200 bg-slate-700 dark:bg-slate-200 text-white dark:text-slate-900'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-400',
+                  ].join(' ')}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[15px]">lock</span>
+                    <span className="text-[12px] font-bold">Private Activity</span>
+                  </div>
+                  <span
+                    className={`text-[10px] leading-tight ${visibility === 'private' ? 'text-white/70 dark:text-slate-600' : 'text-slate-400 dark:text-slate-500'}`}
+                  >
+                    Waterfall only
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* ── Task 4.3: Live Credibility Meter with enhanced nudges ── */}
             <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-4">
               {/* Label row */}
               <div className="flex items-center justify-between mb-3">
@@ -356,9 +476,9 @@ export function CreatePostModal({
                 />
               </div>
 
-              {/* Layer legend */}
+              {/* Layer legend — L1, L2, L3, L4 */}
               <div className="flex items-center gap-2 mb-4">
-                {([1, 2, 4] as const).map(key => {
+                {([1, 2, 3, 4] as const).map(key => {
                   const l = CREDIBILITY_LAYERS[key]
                   const isActive = currentLayerKey >= key
                   return (
@@ -383,19 +503,25 @@ export function CreatePostModal({
                 })}
               </div>
 
-              {/* ── Task 4: Social Nudge Buttons ── */}
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mb-2">
-                Boost credibility:
-              </p>
+              {/* Contextual nudge message */}
+              <div className="flex items-start gap-2 rounded-xl bg-white dark:bg-slate-700/50 border border-slate-100 dark:border-slate-700 px-3 py-2.5 mb-3">
+                <span
+                  className={`material-symbols-outlined text-[14px] shrink-0 mt-0.5 ${layer.textColor}`}
+                >
+                  {currentLayerKey === 4 ? 'check_circle' : 'tips_and_updates'}
+                </span>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                  {layer.nudge}
+                </p>
+              </div>
+
+              {/* Boost buttons */}
               <div className="flex flex-wrap gap-2">
                 {/* Upload Photo → L2 */}
                 {!hasPhoto ? (
                   <button
                     type="button"
-                    onClick={() => {
-                      setHasPhoto(true)
-                      alert('Camera roll opened (mock)')
-                    }}
+                    onClick={() => setHasPhoto(true)}
                     className="flex items-center gap-1.5 rounded-full border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 px-3 py-1.5 text-[11px] font-bold hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                   >
                     <span className="material-symbols-outlined text-[13px]">add_a_photo</span>
@@ -469,14 +595,6 @@ export function CreatePostModal({
             </button>
             <button
               type="button"
-              aria-label="Add location"
-              onClick={() => alert('Fetching location...')}
-              className="transition-colors hover:text-slate-600 dark:hover:text-slate-300"
-            >
-              <span className="material-symbols-outlined text-xl">location_on</span>
-            </button>
-            <button
-              type="button"
               aria-label="Tag partner"
               onClick={() => setTaggedPartner('Jordan P.')}
               className="transition-colors hover:text-emerald-500"
@@ -489,26 +607,40 @@ export function CreatePostModal({
             </button>
           </div>
 
-          {/* Post button */}
+          {/* Post button — shows (Private) label when applicable */}
           <button
             type="button"
             onClick={handlePost}
-            disabled={!canPost}
+            disabled={!canPost || isSaving}
             title={
-              !selectedTarget
+              selectedTargets.length === 0
                 ? 'Choose a goal or achievement first'
                 : !text.trim()
                   ? 'Write something first'
                   : undefined
             }
             className={[
-              'px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-200',
-              canPost
+              'flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200',
+              canPost && !isSaving
                 ? 'bg-primary-brand text-white shadow-md shadow-primary-brand/25 hover:bg-primary-brand/90 active:scale-95'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed',
             ].join(' ')}
           >
-            Post
+            {isSaving ? (
+              <>
+                <span className="material-symbols-outlined text-[16px] animate-spin">
+                  progress_activity
+                </span>
+                Posting...
+              </>
+            ) : (
+              <>
+                {visibility === 'private' && canPost && (
+                  <span className="material-symbols-outlined text-[14px]">lock</span>
+                )}
+                {visibility === 'private' ? 'Post (Private)' : 'Post'}
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -517,7 +649,7 @@ export function CreatePostModal({
 }
 
 // ---------------------------------------------------------------------------
-// TargetOption — row inside the picker dropdown
+// TargetOption — row inside the picker dropdown (multi-select aware)
 // ---------------------------------------------------------------------------
 
 function TargetOption({
@@ -553,11 +685,19 @@ function TargetOption({
         </p>
         <p className="text-[10px] text-slate-400 dark:text-slate-500 capitalize">{target.type}</p>
       </div>
-      {isSelected && (
-        <span className="material-symbols-outlined text-primary-brand shrink-0 text-[18px]">
-          check_circle
-        </span>
-      )}
+      {/* Multi-select checkbox indicator */}
+      <div
+        className={[
+          'h-5 w-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all duration-200',
+          isSelected
+            ? 'border-primary-brand bg-primary-brand'
+            : 'border-slate-300 dark:border-slate-600',
+        ].join(' ')}
+      >
+        {isSelected && (
+          <span className="material-symbols-outlined text-white text-[13px]">check</span>
+        )}
+      </div>
     </button>
   )
 }

@@ -32,7 +32,7 @@ export function CommentsModal({ isOpen, onClose }: CommentsModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center"
+      className="fixed inset-0 z-modal bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center"
       onClick={onClose}
       aria-hidden="true"
     >

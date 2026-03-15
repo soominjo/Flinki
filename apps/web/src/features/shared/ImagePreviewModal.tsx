@@ -8,7 +8,7 @@ export function ImagePreviewModal({ imageUrl, onClose }: ImagePreviewModalProps)
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-viewer bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
       onClick={onClose}
       aria-hidden="true"
     >

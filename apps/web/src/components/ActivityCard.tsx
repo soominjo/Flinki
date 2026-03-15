@@ -54,7 +54,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       {/* Message */}
       <p className="px-3.5 pb-2.5 text-sm text-gray-700 leading-snug">{activity.message}</p>
 
-      {/* Stats grid — Strava style */}
+      {/* Stats grid */}
       {activity.stats && activity.stats.length > 0 && (
         <div className="mx-3.5 mb-2.5 grid grid-cols-4 gap-px rounded-xl overflow-hidden border border-gray-100 bg-gray-100">
           {activity.stats.map(stat => (

@@ -2,6 +2,14 @@
 // Mock Data for Flinki Prototype
 // =============================================================================
 
+export interface AchievementSummary {
+  result?: string
+  totalRuns?: number
+  totalSessions?: number
+  totalDistance?: string
+  totalHours?: number
+}
+
 export interface Achievement {
   id: string
   title: string
@@ -10,6 +18,7 @@ export interface Achievement {
   imageUrl?: string
   unlockedAt: string
   category: 'skill' | 'milestone' | 'social'
+  summary?: AchievementSummary
 }
 
 export interface ActivityStat {
@@ -106,6 +115,7 @@ export const mockAchievements: Achievement[] = [
       'https://images.unsplash.com/photo-1533560904424-a0c61dc306fc?auto=format&fit=crop&q=85&w=1080&h=1080',
     unlockedAt: '2024-04-21',
     category: 'milestone',
+    summary: { result: '2:58:32', totalRuns: 44, totalDistance: '890 km', totalHours: 74 },
   },
   {
     id: 'ach-2',
@@ -117,6 +127,7 @@ export const mockAchievements: Achievement[] = [
       'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=85&w=1080&h=1080',
     unlockedAt: '2024-08-30',
     category: 'milestone',
+    summary: { result: 'Top 200 Finish', totalRuns: 31, totalDistance: '620 km', totalHours: 82 },
   },
   {
     id: 'ach-3',
@@ -128,6 +139,7 @@ export const mockAchievements: Achievement[] = [
       'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=85&w=1080&h=1080',
     unlockedAt: '2024-05-20',
     category: 'milestone',
+    summary: { totalSessions: 30, totalHours: 45 },
   },
   {
     id: 'ach-4',
@@ -139,6 +151,7 @@ export const mockAchievements: Achievement[] = [
       'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&q=85&w=1080&h=1080',
     unlockedAt: '2024-01-15',
     category: 'social',
+    summary: { totalRuns: 5, totalDistance: '42 km', totalHours: 4 },
   },
   {
     id: 'ach-5',
@@ -150,6 +163,7 @@ export const mockAchievements: Achievement[] = [
       'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=85&w=1080&h=1080',
     unlockedAt: '2024-06-01',
     category: 'social',
+    summary: { totalRuns: 12, totalDistance: '95 km', totalHours: 9 },
   },
 ]
 
@@ -165,8 +179,6 @@ export const mockActivities: Activity[] = [
     stats: [
       { label: 'Distance', value: '8.4 km' },
       { label: 'Time', value: '52:18' },
-      { label: 'Pace', value: '6:14 /km' },
-      { label: 'Elev.', value: '210 m' },
     ],
     imageCount: 3,
     imageGradients: [
@@ -217,7 +229,6 @@ export const mockActivities: Activity[] = [
       { label: 'Bike', value: '32 km' },
       { label: 'Run', value: '5 km' },
       { label: 'Total', value: '1h 48m' },
-      { label: 'Cal.', value: '890' },
     ],
   },
   {

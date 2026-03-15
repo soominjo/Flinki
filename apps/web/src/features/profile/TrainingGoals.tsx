@@ -39,9 +39,11 @@ export interface TrainingGoal {
 
 interface TrainingGoalThumbProps {
   goal: TrainingGoal
+  onStoryOpen?: () => void
+  onMarkComplete?: () => void
 }
 
-function TrainingGoalThumb({ goal }: TrainingGoalThumbProps) {
+function TrainingGoalThumb({ goal, onStoryOpen, onMarkComplete }: TrainingGoalThumbProps) {
   const bgColorClass = BG_COLOR_MAP[goal.colorClass] ?? 'bg-slate-400'
 
   const nextMilestone = MILESTONES.find(m => goal.progress < m)
@@ -49,8 +51,13 @@ function TrainingGoalThumb({ goal }: TrainingGoalThumbProps) {
 
   return (
     <div className="flex-none flex flex-col items-center gap-2 w-24">
-      {/* Ring */}
-      <div className="relative h-24 w-24">
+      {/* Ring — tap opens story viewer */}
+      <button
+        type="button"
+        className="relative h-24 w-24"
+        onClick={onStoryOpen}
+        aria-label={`View story for ${goal.title}`}
+      >
         <svg className="progress-ring w-24 h-24" style={{ transform: 'rotate(-90deg)' }}>
           {/* Track */}
           <circle
@@ -93,7 +100,7 @@ function TrainingGoalThumb({ goal }: TrainingGoalThumbProps) {
         >
           {goal.progress}%
         </div>
-      </div>
+      </button>
 
       {/* Title */}
       <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 text-center leading-tight">
@@ -118,47 +125,18 @@ function TrainingGoalThumb({ goal }: TrainingGoalThumbProps) {
       <span className="text-[9px] font-medium text-slate-400 dark:text-slate-500">
         {milestoneLabel}
       </span>
-    </div>
-  )
-}
 
-// ---------------------------------------------------------------------------
-// Albums
-// ---------------------------------------------------------------------------
-
-export interface AlbumThumb {
-  id: string
-  title: string
-  imageUrl?: string
-}
-
-interface AlbumCircleProps {
-  album: AlbumThumb
-  isSelected: boolean
-  onSelect: (id: string) => void
-}
-
-function AlbumCircle({ album, isSelected, onSelect }: AlbumCircleProps) {
-  return (
-    <div className="flex-none text-center">
-      <div
-        className={[
-          'h-16 w-16 rounded-full bg-cover bg-center mb-1 ring-2 ring-offset-2 transition-all overflow-hidden cursor-pointer',
-          isSelected
-            ? 'ring-primary-brand bg-primary-brand'
-            : 'ring-transparent bg-slate-200 dark:bg-slate-700 hover:ring-primary-brand',
-        ].join(' ')}
-        style={album.imageUrl ? { backgroundImage: `url('${album.imageUrl}')` } : undefined}
-        onClick={() => onSelect(album.id)}
-        role="button"
-        aria-label={`Select album: ${album.title}`}
-        aria-pressed={isSelected}
-      />
-      <span
-        className={`text-[10px] font-semibold ${isSelected ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}
-      >
-        {album.title}
-      </span>
+      {/* Finish & Log */}
+      {onMarkComplete && (
+        <button
+          type="button"
+          onClick={onMarkComplete}
+          className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors"
+        >
+          <span className="material-symbols-outlined text-[13px]">emoji_events</span>
+          Finish &amp; Log
+        </button>
+      )}
     </div>
   )
 }
@@ -169,20 +147,14 @@ function AlbumCircle({ album, isSelected, onSelect }: AlbumCircleProps) {
 
 interface TrainingGoalsSectionProps {
   goals: TrainingGoal[]
-  albums: AlbumThumb[]
-  selectedAlbumId: string
   onAddGoal?: () => void
-  onSelectAlbum?: (id: string) => void
-  onShowAllPhotos?: () => void
+  onMarkComplete?: (goalId: string, goalTitle: string) => void
 }
 
 export function TrainingGoalsSection({
   goals,
-  albums,
-  selectedAlbumId,
   onAddGoal,
-  onSelectAlbum,
-  onShowAllPhotos,
+  onMarkComplete,
 }: TrainingGoalsSectionProps) {
   const [activeStory, setActiveStory] = useState<{ title: string; imageUrl: string } | null>(null)
 
@@ -202,19 +174,16 @@ export function TrainingGoalsSection({
         </div>
         <div className="flex gap-5 overflow-x-auto no-scrollbar px-6 pb-3 md:flex-wrap md:overflow-x-visible">
           {goals.map(goal => (
-            <button
+            <TrainingGoalThumb
               key={goal.id}
-              type="button"
-              className="flex-none"
-              onClick={() =>
-                setActiveStory({
-                  title: goal.title,
-                  imageUrl: goal.imageUrl ?? '',
-                })
+              goal={goal}
+              onStoryOpen={() =>
+                setActiveStory({ title: goal.title, imageUrl: goal.imageUrl ?? '' })
               }
-            >
-              <TrainingGoalThumb goal={goal} />
-            </button>
+              onMarkComplete={
+                onMarkComplete ? () => onMarkComplete(goal.id, goal.title) : undefined
+              }
+            />
           ))}
 
           {/* Add Goal */}
@@ -230,36 +199,6 @@ export function TrainingGoalsSection({
               Add Goal
             </span>
           </div>
-        </div>
-      </section>
-
-      {/* Albums */}
-      <section className="mt-8">
-        <div className="px-6 flex justify-between items-end mb-4">
-          <h3 className="font-bold text-slate-900 dark:text-white text-lg">Albums</h3>
-          <button className="text-primary-brand text-sm font-semibold" onClick={onShowAllPhotos}>
-            Show all photos
-          </button>
-        </div>
-        <div className="flex gap-4 overflow-x-auto no-scrollbar px-6 pb-2 md:flex-wrap md:overflow-x-visible">
-          {albums.map(album => (
-            <div
-              key={album.id}
-              className="flex-none"
-              onClick={() =>
-                setActiveStory({
-                  title: album.title,
-                  imageUrl: album.imageUrl ?? '',
-                })
-              }
-            >
-              <AlbumCircle
-                album={album}
-                isSelected={album.id === selectedAlbumId}
-                onSelect={onSelectAlbum ?? (() => {})}
-              />
-            </div>
-          ))}
         </div>
       </section>
 

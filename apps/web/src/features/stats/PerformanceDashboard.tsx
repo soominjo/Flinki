@@ -1,5 +1,13 @@
 import { useState } from 'react'
 import { personalBests, gearLocker } from '../../lib/mockStatsData'
+import type { PersonalBest } from '../../lib/mockStatsData'
+import { TrustMatrixWidget } from '../profile/TrustMatrixWidget'
+import { mockAchievements } from '../../lib/mockData'
+import { AddGearModal } from './AddGearModal'
+import { GearDetailModal } from './GearDetailModal'
+import type { GearLockerItem } from './GearDetailModal'
+import { PRDetailModal } from './PRDetailModal'
+import { ShareStatsModal } from './ShareStatsModal'
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -78,7 +86,11 @@ function ActivityHeatmap({ cells }: { cells: HeatmapColor[] }) {
       </p>
       <div className="grid grid-cols-12 gap-1.5">
         {cells.map((color, i) => (
-          <div key={i} className={`aspect-square rounded-[2px] ${color}`} />
+          <div
+            key={i}
+            className={`aspect-square rounded-[2px] ${color} ${color === 'bg-slate-200' ? 'dark:bg-slate-700' : ''} relative transition-transform duration-150 hover:scale-125 hover:z-10 cursor-pointer`}
+            title={`Week ${i + 1}`}
+          />
         ))}
       </div>
     </div>
@@ -136,6 +148,8 @@ function StatsAndHeatmapCard({ stats }: { stats: YearStats }) {
 // ---------------------------------------------------------------------------
 
 function TrainingLoadCard({ load }: { load: YearStats['trainingLoad'] }) {
+  const [hoveredBar, setHoveredBar] = useState<number | null>(null)
+
   return (
     <div className="p-4 pt-0">
       <h3 className="text-slate-900 dark:text-white text-lg font-bold font-display mb-4">
@@ -152,9 +166,9 @@ function TrainingLoadCard({ load }: { load: YearStats['trainingLoad'] }) {
               {load.weeklyEffort}
             </p>
           </div>
-          <div className="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-full">
             <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <p className="text-emerald-600 text-[10px] font-bold uppercase tracking-tight">
+            <p className="text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-tight">
               Status: {load.status}
             </p>
           </div>
@@ -174,9 +188,18 @@ function TrainingLoadCard({ load }: { load: YearStats['trainingLoad'] }) {
           {load.bars.map((pct, i) => (
             <div
               key={i}
-              className="flex-1 bg-gradient-to-t from-primary-brand to-indigo-400 rounded-t-sm z-10"
+              className="relative flex-1 z-10"
               style={{ height: `${pct}%` }}
-            />
+              onMouseEnter={() => setHoveredBar(i)}
+              onMouseLeave={() => setHoveredBar(null)}
+            >
+              {hoveredBar === i && (
+                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-800 text-white dark:bg-white dark:text-slate-900 text-[9px] font-bold px-1.5 py-0.5 rounded whitespace-nowrap pointer-events-none z-20">
+                  Effort: {pct}
+                </div>
+              )}
+              <div className="h-full w-full bg-gradient-to-t from-primary-brand to-indigo-400 rounded-t-sm transition-transform duration-150 hover:scale-110 origin-bottom" />
+            </div>
           ))}
         </div>
 
@@ -197,7 +220,9 @@ function TrainingLoadCard({ load }: { load: YearStats['trainingLoad'] }) {
 // Personal Records horizontal scroll
 // ---------------------------------------------------------------------------
 
-function PersonalRecordsRow() {
+function PersonalRecordsRow({ onViewEvidenceJourney }: { onViewEvidenceJourney: () => void }) {
+  const [selectedPR, setSelectedPR] = useState<PersonalBest | null>(null)
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -213,7 +238,11 @@ function PersonalRecordsRow() {
             key={pr.id}
             className={`min-w-[160px] p-[2px] rounded-xl bg-gradient-to-br ${pr.theme}`}
           >
-            <div className="bg-white dark:bg-slate-900 rounded-[10px] p-4 h-full relative">
+            <button
+              type="button"
+              onClick={() => setSelectedPR(pr)}
+              className="w-full text-left bg-white dark:bg-slate-900 rounded-[10px] p-4 h-full relative hover:shadow-md transition-all duration-150"
+            >
               <div className="flex items-center gap-2 mb-3">
                 <span className="material-symbols-outlined text-primary-brand text-xl">
                   {pr.icon}
@@ -238,10 +267,20 @@ function PersonalRecordsRow() {
                   </p>
                 </div>
               )}
-            </div>
+            </button>
           </div>
         ))}
       </div>
+
+      <PRDetailModal
+        isOpen={selectedPR !== null}
+        onClose={() => setSelectedPR(null)}
+        pr={selectedPR}
+        onViewEvidenceJourney={() => {
+          setSelectedPR(null)
+          onViewEvidenceJourney()
+        }}
+      />
     </div>
   )
 }
@@ -251,6 +290,14 @@ function PersonalRecordsRow() {
 // ---------------------------------------------------------------------------
 
 function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [selectedGear, setSelectedGear] = useState<GearLockerItem | null>(null)
+
+  function handleAddClick() {
+    setShowAddModal(true)
+    onAddGear?.()
+  }
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -259,7 +306,7 @@ function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
         </h3>
         <button
           className="bg-primary-brand/10 text-primary-brand p-2 rounded-full flex items-center justify-center"
-          onClick={onAddGear}
+          onClick={handleAddClick}
           aria-label="Add gear"
         >
           <span className="material-symbols-outlined text-xl">add</span>
@@ -275,9 +322,11 @@ function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
           const fillPct = (item.currentMetric / item.maxMetric) * 100
 
           return (
-            <div
+            <button
               key={item.id}
-              className="flex items-center gap-4 p-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm"
+              type="button"
+              onClick={() => setSelectedGear(item)}
+              className="w-full text-left flex items-center gap-4 p-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm hover:border-primary-brand/30 hover:shadow-md transition-all duration-150"
             >
               {/* Gear image */}
               <div
@@ -293,9 +342,9 @@ function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
                   <h4 className="text-slate-900 dark:text-white font-bold text-sm font-display truncate">
                     {item.brand} {item.model}
                   </h4>
-                  <button className="text-slate-400 shrink-0" aria-label="More options">
-                    <span className="material-symbols-outlined">more_vert</span>
-                  </button>
+                  <span className="material-symbols-outlined text-slate-400 shrink-0 text-base">
+                    chevron_right
+                  </span>
                 </div>
 
                 {/* Usage progress bar */}
@@ -305,7 +354,6 @@ function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
                     <span>{rightLabel}</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    {/* Width calculated as (currentMetric / maxMetric) * 100 */}
                     <div
                       className={`${item.color} h-full rounded-full`}
                       style={{ width: `${fillPct}%` }}
@@ -313,10 +361,17 @@ function GearLockerList({ onAddGear }: { onAddGear?: () => void }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </button>
           )
         })}
       </div>
+
+      <AddGearModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} />
+      <GearDetailModal
+        isOpen={selectedGear !== null}
+        onClose={() => setSelectedGear(null)}
+        gear={selectedGear}
+      />
     </div>
   )
 }
@@ -402,6 +457,105 @@ function DashboardHeader({
 }
 
 // ---------------------------------------------------------------------------
+// ProfileAnalyticsCard — Views & Impressions sparklines
+// ---------------------------------------------------------------------------
+
+export function ProfileAnalyticsCard() {
+  const metrics = [
+    {
+      label: 'Profile Views',
+      icon: 'visibility',
+      value: '1,240',
+      sub: 'this week',
+      change: '+18%',
+      color: 'text-violet-600 dark:text-violet-400',
+      stroke: '#7c3aed',
+      fill: '#7c3aed18',
+      points: '0,34 20,31 40,26 60,24 80,17 100,10 120,4',
+    },
+    {
+      label: 'Impressions',
+      icon: 'bar_chart',
+      value: '8,470',
+      sub: 'this month',
+      change: '+23%',
+      color: 'text-sky-600 dark:text-sky-400',
+      stroke: '#0284c7',
+      fill: '#0284c718',
+      points: '0,34 20,31 40,27 60,22 80,25 100,18 120,4',
+    },
+  ]
+
+  return (
+    <section className="mx-4 mt-4 mb-3">
+      <div className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center gap-2 px-4 pt-4 pb-3">
+          <div className="h-8 w-8 rounded-xl bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center">
+            <span className="material-symbols-outlined text-violet-500 text-[18px]">analytics</span>
+          </div>
+          <div>
+            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider leading-none mb-0.5">
+              Stats
+            </p>
+            <p className="text-sm font-black text-slate-900 dark:text-white leading-none">
+              Profile Analytics
+            </p>
+          </div>
+        </div>
+
+        {/* Metric rows */}
+        <div className="px-4 pb-4 flex flex-col gap-4">
+          {metrics.map(m => (
+            <div key={m.label} className="flex items-end gap-3">
+              {/* Left: label + value + trend */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1 mb-0.5">
+                  <span className={`material-symbols-outlined text-[13px] ${m.color}`}>
+                    {m.icon}
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    {m.label}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className={`text-2xl font-black tabular-nums leading-none ${m.color}`}>
+                    {m.value}
+                  </span>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500">{m.sub}</span>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="material-symbols-outlined text-emerald-500 text-[12px]">
+                    trending_up
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                    {m.change} vs last period
+                  </span>
+                </div>
+              </div>
+
+              {/* Right: sparkline */}
+              <svg viewBox="0 0 120 40" className="w-24 h-10 shrink-0">
+                <polyline points={`0,40 ${m.points} 120,40`} fill={m.fill} stroke="none" />
+                <polyline
+                  points={m.points}
+                  fill="none"
+                  stroke={m.stroke}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="120" cy="4" r="3" fill={m.stroke} />
+              </svg>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // PerformanceDashboard — composed view
 // ---------------------------------------------------------------------------
 
@@ -417,10 +571,10 @@ interface PerformanceDashboardProps {
 export function PerformanceDashboard({
   statsByYear,
   onBack,
-  onShare,
   onAddGear,
 }: PerformanceDashboardProps) {
   const [activeYear, setActiveYear] = useState<FilterYear>('2025')
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const stats = statsByYear[activeYear]
 
@@ -432,8 +586,11 @@ export function PerformanceDashboard({
         activeYear={activeYear}
         onYearChange={setActiveYear}
         onBack={onBack}
-        onShare={onShare}
+        onShare={() => setShowShareModal(true)}
       />
+
+      {/* Credibility Profile */}
+      <TrustMatrixWidget achievementsCount={mockAchievements.length} />
 
       {/* Main Content Area */}
       {stats ? (
@@ -443,7 +600,7 @@ export function PerformanceDashboard({
             <StatsAndHeatmapCard stats={stats} />
             <TrainingLoadCard load={stats.trainingLoad} />
           </div>
-          <PersonalRecordsRow />
+          <PersonalRecordsRow onViewEvidenceJourney={() => onBack?.()} />
           <GearLockerList onAddGear={onAddGear} />
         </div>
       ) : (
@@ -451,6 +608,14 @@ export function PerformanceDashboard({
           No data for {activeYear}
         </div>
       )}
+
+      <ShareStatsModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        year={activeYear}
+        stats={stats ?? null}
+        topPR={personalBests[0]}
+      />
     </div>
   )
 }

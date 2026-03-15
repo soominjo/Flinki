@@ -18,7 +18,7 @@ export function SuggestedProfileModal({ athlete, onClose }: SuggestedProfileModa
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-overlay bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
       onClick={onClose}
       aria-hidden="true"
     >

@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#451bc0",
+                        "primary": "#8563EB",
                         "accent-blue": "#3b82f6",
                         "accent-green": "#22c55e",
                         "background-light": "#f6f6f8",

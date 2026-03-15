@@ -1,4 +1,15 @@
-export const personalBests = [
+export interface PersonalBest {
+  id: string
+  sport: string
+  time: string
+  icon: string
+  verified: boolean
+  theme: string
+  date: string
+  source: string
+}
+
+export const personalBests: PersonalBest[] = [
   {
     id: 'pr-1',
     sport: 'Marathon',
@@ -6,6 +17,8 @@ export const personalBests = [
     icon: 'directions_run',
     verified: true,
     theme: 'from-primary via-indigo-400 to-emerald-400',
+    date: 'Oct 6, 2024',
+    source: 'Berlin Marathon — Official Chip Time',
   },
   {
     id: 'pr-2',
@@ -14,6 +27,8 @@ export const personalBests = [
     icon: 'directions_run',
     verified: true,
     theme: 'from-primary/30 to-indigo-200',
+    date: 'Mar 15, 2025',
+    source: 'Parkrun — GPS Verified',
   },
   {
     id: 'pr-3',
@@ -22,6 +37,8 @@ export const personalBests = [
     icon: 'directions_bike',
     verified: true,
     theme: 'from-primary/30 to-indigo-200',
+    date: 'Jul 22, 2024',
+    source: 'Strava — Auto-Detected',
   },
 ]
 
@@ -48,12 +65,12 @@ export const gearLocker = [
   },
   {
     id: 'gear-3',
-    brand: 'Garmin',
-    model: 'Forerunner 965',
-    image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=150&q=80',
-    currentMetric: 98,
-    maxMetric: 100,
-    metricUnit: '% Battery',
-    color: 'bg-emerald-500',
+    brand: 'Salomon',
+    model: 'S/Lab Sense 8 Set',
+    image: 'https://images.unsplash.com/photo-1622126807280-5b96d3c6c97c?w=150&q=80',
+    currentMetric: 18,
+    maxMetric: 50,
+    metricUnit: 'races used',
+    color: 'bg-sky-500',
   },
 ]

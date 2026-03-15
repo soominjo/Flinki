@@ -24,7 +24,7 @@ export function StoryViewerModal({ isOpen, onClose, title, imageUrl }: StoryView
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex justify-center items-center animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-viewer bg-black/95 backdrop-blur-sm flex justify-center items-center animate-in fade-in zoom-in-95 duration-200">
       <div className="relative w-full h-full md:h-[90vh] md:max-w-[400px] md:rounded-2xl overflow-hidden bg-black flex flex-col shadow-2xl">
         {/* Progress / header strip */}
         <div className="absolute top-0 left-0 right-0 z-10">

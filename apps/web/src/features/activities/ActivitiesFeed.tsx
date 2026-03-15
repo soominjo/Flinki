@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CommentsModal } from './CommentsModal'
 import { CreatePostModal } from './CreatePostModal'
+import { SuggestedProfileModal } from '../sidebar/SuggestedProfileModal'
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -27,6 +28,121 @@ export interface ActivityPost {
   mediaUrls?: string[]
   kudosCount: number
   commentCount: number
+  /** Optional goal/achievement this post is building towards */
+  goalLink?: {
+    id: string
+    title: string
+    icon?: string
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Suggested Athletes horizontal strip
+// ---------------------------------------------------------------------------
+
+const SUGGESTED_ATHLETES = [
+  {
+    id: 'sarah-jenkins',
+    name: 'Sarah Jenkins',
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&h=400&q=85',
+    tags: 'Marathoner • Climber • Designer',
+    bio: 'Passionate trail runner based in Austin. Always looking for weekend long-run partners!',
+  },
+  {
+    id: 'marcus-thorne',
+    name: 'Marcus Thorne',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&h=400&q=85',
+    tags: 'Ultra Runner • Coach',
+    bio: 'Ultra runner and running coach. Love helping others crush their first 50K or 100-miler.',
+  },
+  {
+    id: 'nina-patel',
+    name: 'Nina Patel',
+    avatar:
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&h=400&q=85',
+    tags: 'Triathlete • Nutritionist',
+    bio: 'Triathlete and sports nutritionist. Balancing swim-bike-run with helping athletes fuel properly.',
+  },
+  {
+    id: 'jordan-pierce',
+    name: 'Jordan Pierce',
+    avatar:
+      'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&h=400&q=85',
+    tags: 'Cyclist • Duathlete',
+    bio: 'Weekend warrior turned competitive cyclist. Always chasing the next KOM.',
+  },
+]
+
+type SuggestedAthlete = (typeof SUGGESTED_ATHLETES)[0]
+
+export function SuggestedAthletesStrip() {
+  const [requestedIds, setRequestedIds] = useState<Record<string, boolean>>({})
+  const [previewAthlete, setPreviewAthlete] = useState<SuggestedAthlete | null>(null)
+
+  return (
+    <>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="text-sm font-bold text-slate-900 dark:text-white">Suggested Athletes</h4>
+          <button
+            type="button"
+            className="text-xs font-semibold text-primary-brand hover:underline"
+            onClick={() => alert('See all suggestions')}
+          >
+            See all
+          </button>
+        </div>
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+          {SUGGESTED_ATHLETES.map(athlete => {
+            const isRequested = requestedIds[athlete.id] === true
+            return (
+              <div
+                key={athlete.id}
+                className="flex-none w-28 flex flex-col items-center gap-2 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800"
+              >
+                <button
+                  type="button"
+                  onClick={() => setPreviewAthlete(athlete)}
+                  className="flex flex-col items-center gap-1.5 hover:opacity-80 transition-opacity"
+                  aria-label={`View ${athlete.name}'s profile`}
+                >
+                  <img
+                    src={athlete.avatar}
+                    alt={athlete.name}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-slate-700 shadow-sm"
+                    loading="lazy"
+                  />
+                  <span className="text-[11px] font-bold text-slate-900 dark:text-slate-100 text-center leading-tight line-clamp-2">
+                    {athlete.name}
+                  </span>
+                  <span className="text-[9px] text-slate-400 dark:text-slate-500 text-center leading-tight line-clamp-2">
+                    {athlete.tags}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  disabled={isRequested}
+                  onClick={() => setRequestedIds(prev => ({ ...prev, [athlete.id]: true }))}
+                  className={[
+                    'w-full text-[10px] font-bold px-2 py-1.5 rounded-full transition-colors',
+                    isRequested
+                      ? 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400 cursor-not-allowed'
+                      : 'bg-primary-brand text-white hover:brightness-110',
+                  ].join(' ')}
+                >
+                  {isRequested ? 'Pending' : 'Connect'}
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <SuggestedProfileModal athlete={previewAthlete} onClose={() => setPreviewAthlete(null)} />
+    </>
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -204,6 +320,20 @@ function ActivityPostCard({
           )}
         </div>
       </div>
+
+      {/* "Building towards" goal badge — top of card content */}
+      {post.goalLink && (
+        <div className="px-4 pt-1 pb-2">
+          <button
+            type="button"
+            onClick={() => alert(`Goal: ${post.goalLink!.title}`)}
+            className="inline-flex items-center gap-1.5 bg-primary-brand/8 dark:bg-primary-brand/15 border border-primary-brand/15 dark:border-primary-brand/25 text-primary-brand rounded-full px-3 py-1 hover:bg-primary-brand/15 transition-colors"
+          >
+            <span className="text-[13px]">🎯</span>
+            <span className="text-[11px] font-bold">Building towards: {post.goalLink.title}</span>
+          </button>
+        </div>
+      )}
 
       {/* Workout Stats */}
       {post.stats && post.stats.length > 0 && <WorkoutStatsBar stats={post.stats} />}

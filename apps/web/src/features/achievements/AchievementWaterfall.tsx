@@ -7,6 +7,7 @@ import {
   type TrustLayer,
   type EvidenceItem,
 } from './AchievementDetailModal'
+import { TRAINING_SESSIONS, ActivityDetailModal, type TrainingSession } from './ActivityDetailModal'
 
 // ---------------------------------------------------------------------------
 // Timeline Node — one evidence entry in the vertical waterfall
@@ -15,20 +16,21 @@ import {
 interface TimelineNodeProps {
   item: EvidenceItem
   isLast: boolean
+  onClick?: () => void
 }
 
-function TimelineNode({ item, isLast }: TimelineNodeProps) {
+function TimelineNode({ item, isLast, onClick }: TimelineNodeProps) {
   const c = TRUST_LAYERS[item.layer]
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 group/node">
       {/* ── Left column: node circle + vertical connector ── */}
-      <div className="flex flex-col items-center shrink-0 w-10">
-        {/* Colored node circle */}
+      <div className="flex flex-col items-center shrink-0 w-8">
+        {/* Colored node circle — Task 2: smaller + scale on hover */}
         <div
-          className={`relative z-10 h-10 w-10 rounded-full flex items-center justify-center shadow-sm ${c.nodeBg}`}
+          className={`relative z-10 h-8 w-8 rounded-full flex items-center justify-center shadow-sm transition-transform duration-200 group-hover/node:scale-110 ${c.nodeBg}`}
         >
-          <span className={`material-symbols-outlined text-[20px] ${c.nodeIcon}`}>{item.icon}</span>
+          <span className={`material-symbols-outlined text-[17px] ${c.nodeIcon}`}>{item.icon}</span>
           {/* Layer number badge — bottom-right of the node */}
           <span
             className={`absolute -bottom-1 -right-1 text-[8px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-sm ${c.pill}`}
@@ -39,31 +41,56 @@ function TimelineNode({ item, isLast }: TimelineNodeProps) {
 
         {/* Connector line to next node */}
         {!isLast && (
-          <div className={`w-0.5 flex-1 min-h-[20px] mt-1 mb-1 rounded-full ${c.connector}`} />
+          <div
+            className={`w-0.5 flex-1 min-h-[20px] mt-1 mb-1 rounded-full opacity-50 group-hover/node:opacity-100 transition-opacity duration-200 ${c.connector}`}
+          />
         )}
       </div>
 
-      {/* ── Right column: evidence card ── */}
-      <div className={`flex-1 min-w-0 rounded-2xl border p-3 mb-3 ${c.cardBg}`}>
-        {/* Task 4: Trust layer badge */}
+      {/* ── Right column: evidence card — clickable for L3 nodes ── */}
+      <div
+        role={onClick ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        onClick={onClick}
+        onKeyDown={
+          onClick
+            ? e => {
+                if (e.key === 'Enter' || e.key === ' ') onClick()
+              }
+            : undefined
+        }
+        className={[
+          'flex-1 min-w-0 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 mb-3 transition-transform duration-200 group-hover/node:-translate-y-0.5 shadow-sm group-hover/node:shadow-md',
+          onClick ? 'cursor-pointer hover:ring-2 hover:ring-blue-400/50' : '',
+        ].join(' ')}
+      >
+        {/* Trust layer badge */}
         <div className="flex items-center gap-1.5 mb-2">
           <TrustLayerBadge layer={item.layer} />
         </div>
 
-        {/* Title + value */}
+        {/* Title + value — Task 3: value in metric pill */}
         <div className="flex items-start justify-between gap-2">
           <p className="text-slate-800 dark:text-white font-semibold text-sm leading-tight flex-1 min-w-0">
             {item.title}
           </p>
           {item.value && (
-            <span className={`shrink-0 text-sm font-bold ${c.valueColor}`}>{item.value}</span>
+            <span
+              className={`shrink-0 text-[11px] font-black tabular-nums px-2 py-0.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 ${c.valueColor}`}
+            >
+              {item.value}
+            </span>
           )}
         </div>
 
-        {/* Photo thumbnail */}
+        {/* Photo thumbnail — Task 4: slow pan on hover */}
         {item.imageUrl && (
           <div className="mt-2.5 rounded-xl overflow-hidden h-32">
-            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+            <img
+              src={item.imageUrl}
+              alt={item.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover/node:scale-105"
+            />
           </div>
         )}
 
@@ -112,6 +139,7 @@ interface AchievementWaterfallProps {
 
 export function AchievementWaterfall({ achievement }: AchievementWaterfallProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [selectedSession, setSelectedSession] = useState<TrainingSession | null>(null)
 
   const evidence = EVIDENCE[achievement.id] ?? []
   const l6Item = evidence.find(e => e.layer === 6)
@@ -162,19 +190,53 @@ export function AchievementWaterfall({ achievement }: AchievementWaterfallProps)
             </span>
           </div>
 
-          {/* Bottom overlay: title + date */}
+          {/* Bottom overlay: title + date + summary stats */}
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <h4 className="text-white font-bold text-[17px] leading-snug">{achievement.title}</h4>
             <p className="text-white/60 text-[11px] mt-0.5">Unlocked {dateFormatted}</p>
+
+            {/* Summary stat pills */}
+            {achievement.summary && (
+              <div className="flex items-center flex-wrap gap-1.5 mt-2">
+                {achievement.summary.result && (
+                  <span className="inline-flex items-center gap-1 bg-white/15 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-white text-[10px] font-bold">
+                    <span className="material-symbols-outlined text-[11px]">timer</span>
+                    {achievement.summary.result}
+                  </span>
+                )}
+                {achievement.summary.totalRuns != null && (
+                  <span className="inline-flex items-center gap-1 bg-white/15 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-white text-[10px] font-bold">
+                    <span className="material-symbols-outlined text-[11px]">directions_run</span>
+                    {achievement.summary.totalRuns} Runs
+                  </span>
+                )}
+                {achievement.summary.totalSessions != null && (
+                  <span className="inline-flex items-center gap-1 bg-white/15 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-white text-[10px] font-bold">
+                    <span className="material-symbols-outlined text-[11px]">calendar_today</span>
+                    {achievement.summary.totalSessions} Sessions
+                  </span>
+                )}
+                {achievement.summary.totalDistance && (
+                  <span className="inline-flex items-center gap-1 bg-white/15 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-white text-[10px] font-bold">
+                    <span className="material-symbols-outlined text-[11px]">route</span>
+                    {achievement.summary.totalDistance}
+                  </span>
+                )}
+                {achievement.summary.totalHours != null && (
+                  <span className="inline-flex items-center gap-1 bg-white/15 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-white text-[10px] font-bold">
+                    <span className="material-symbols-outlined text-[11px]">schedule</span>
+                    {achievement.summary.totalHours}h
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* ── L6 Outcome Panel (Official Results) ── */}
         {l6Item && (
           <div className="px-4 pt-4 pb-1">
-            <div
-              className={`flex items-center gap-3 rounded-2xl border p-3 ${TRUST_LAYERS[6].cardBg}`}
-            >
+            <div className="flex items-center gap-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
               {/* L6 icon */}
               <div
                 className={`h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 ${TRUST_LAYERS[6].nodeBg}`}
@@ -214,42 +276,37 @@ export function AchievementWaterfall({ achievement }: AchievementWaterfallProps)
 
         {/* ── Trust score bar + Expand Journey button ── */}
         <div className="px-4 pt-3 pb-4">
-          {/* Multi-layer trust bar */}
+          {/* ── Clickable Trust Score Row (Accordion Header) ── */}
           {evidence.length > 0 && (
-            <div className="mb-3">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Credibility Chain
-                </span>
-                <span className={`text-[10px] font-bold ${maxLayerCfg.valueColor}`}>
-                  {maxLayerCfg.label}
+            <div
+              className="flex items-center gap-4 cursor-pointer group"
+              onClick={() => setIsExpanded(prev => !prev)}
+              role="button"
+              aria-expanded={isExpanded}
+            >
+              {/* Left side: Trust Bar */}
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider group-hover:text-slate-500 transition-colors">
+                    Credibility Chain
+                  </span>
+                  <span className={`text-[10px] font-bold ${maxLayerCfg.valueColor}`}>
+                    {maxLayerCfg.label}
+                  </span>
+                </div>
+                <TrustScoreBar layers={evidenceLayers} />
+              </div>
+
+              {/* Right side: Chevron Button */}
+              <div className="shrink-0 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary-brand/10 transition-colors">
+                <span
+                  className={`material-symbols-outlined text-slate-400 group-hover:text-primary-brand transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                >
+                  expand_more
                 </span>
               </div>
-              <TrustScoreBar layers={evidenceLayers} />
             </div>
           )}
-
-          {/* Expand Journey button */}
-          <button
-            type="button"
-            onClick={() => setIsExpanded(prev => !prev)}
-            className={[
-              'w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold transition-all duration-200',
-              isExpanded
-                ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                : 'bg-primary-brand text-white shadow-md shadow-primary-brand/20 hover:bg-primary-brand/90 active:scale-[0.98]',
-            ].join(' ')}
-          >
-            <span className="material-symbols-outlined text-[18px]">
-              {isExpanded ? 'expand_less' : 'timeline'}
-            </span>
-            {isExpanded ? 'Collapse Journey' : 'Expand Journey'}
-            <span
-              className={`material-symbols-outlined text-[18px] transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-            >
-              keyboard_arrow_down
-            </span>
-          </button>
         </div>
       </div>
 
@@ -267,13 +324,115 @@ export function AchievementWaterfall({ achievement }: AchievementWaterfallProps)
             </span>
           </div>
 
-          {/* Timeline nodes */}
+          {/* Timeline nodes — L3 nodes open the ActivityDetailModal */}
           <div className="px-4 pb-4">
             {evidence.map((item, idx) => (
-              <TimelineNode key={item.id} item={item} isLast={idx === evidence.length - 1} />
+              <TimelineNode
+                key={item.id}
+                item={item}
+                isLast={idx === evidence.length - 1}
+                onClick={
+                  item.layer === 3
+                    ? () => {
+                        const sessions = TRAINING_SESSIONS[achievement.id]
+                        if (sessions?.length) setSelectedSession(sessions[0])
+                      }
+                    : undefined
+                }
+              />
             ))}
           </div>
         </div>
+      )}
+
+      {/* ── Task 2.1: Training Log (chronological activity timeline) ────── */}
+      {isExpanded &&
+        (() => {
+          const sessions = TRAINING_SESSIONS[achievement.id] ?? []
+          if (sessions.length === 0) return null
+          return (
+            <div className="border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+              {/* Section header */}
+              <div className="px-4 pt-4 pb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-slate-400 text-lg">
+                  calendar_month
+                </span>
+                <h3 className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Training Log
+                </h3>
+                <span className="ml-auto text-[10px] text-slate-400 dark:text-slate-500">
+                  {sessions.length} sessions
+                </span>
+              </div>
+
+              {/* Session rows */}
+              <div className="px-4 pb-5 flex flex-col gap-2">
+                {sessions.map((session, idx) => (
+                  <button
+                    key={session.id}
+                    type="button"
+                    onClick={() => setSelectedSession(session)}
+                    className="w-full flex items-center gap-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 px-3 py-2.5 text-left hover:border-primary-brand/30 hover:bg-primary-brand/5 dark:hover:border-primary-brand/30 dark:hover:bg-primary-brand/10 transition-all duration-150 group/session"
+                  >
+                    {/* Left: icon circle + connector */}
+                    <div className="flex flex-col items-center shrink-0 self-stretch">
+                      <div className="h-8 w-8 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center shadow-sm group-hover/session:border-primary-brand/50 transition-colors">
+                        <span className="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover/session:text-primary-brand text-[16px] transition-colors">
+                          {session.icon}
+                        </span>
+                      </div>
+                      {idx < sessions.length - 1 && (
+                        <div className="w-px flex-1 min-h-[6px] my-1 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-[13px] font-bold text-slate-800 dark:text-white truncate group-hover/session:text-primary-brand transition-colors">
+                          {session.activityType}
+                        </p>
+                        <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover/session:text-primary-brand text-[16px] shrink-0 transition-colors">
+                          chevron_right
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                        {session.date}
+                      </p>
+                      {/* Inline stats */}
+                      {(session.distance || session.duration) && (
+                        <div className="flex items-center gap-3 mt-1.5">
+                          {session.distance && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                              <span className="material-symbols-outlined text-[11px]">route</span>
+                              {session.distance}
+                            </span>
+                          )}
+                          {session.duration && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                              <span className="material-symbols-outlined text-[11px]">timer</span>
+                              {session.duration}
+                            </span>
+                          )}
+                          {session.deviceSync && (
+                            <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-blue-500 dark:text-blue-400 ml-auto">
+                              <span className="material-symbols-outlined text-[10px]">sync</span>
+                              {session.deviceSync}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
+      {/* ── Activity Detail Modal ────────────────────────────────────────── */}
+      {selectedSession && (
+        <ActivityDetailModal session={selectedSession} onClose={() => setSelectedSession(null)} />
       )}
     </div>
   )

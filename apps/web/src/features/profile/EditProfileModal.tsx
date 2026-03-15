@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { mockUser } from '../../lib/mockData'
+import { showToast } from '../shared/Toaster'
 
 export interface ProfileData {
   name: string
@@ -20,10 +22,16 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
   const [name, setName] = useState(profileData.name)
   const [bio, setBio] = useState(profileData.bio)
   const [location, setLocation] = useState(profileData.location)
+  const [isSaving, setIsSaving] = useState(false)
 
   function handleSave() {
-    onSave({ name: name.trim() || profileData.name, bio, location })
-    onClose()
+    if (!canSave || isSaving) return
+    setIsSaving(true)
+    setTimeout(() => {
+      onSave({ name: name.trim() || profileData.name, bio, location })
+      showToast('Profile updated!')
+      onClose()
+    }, 1000)
   }
 
   const canSave = name.trim().length > 0
@@ -32,14 +40,14 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-modal"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Sheet / Dialog */}
-      <div className="fixed inset-x-0 bottom-0 z-[60] flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
-        <div className="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-t-[2.5rem] shadow-2xl animate-slide-up pointer-events-auto flex flex-col max-h-[92vh] md:relative md:rounded-2xl md:max-w-md md:max-h-[85vh]">
+      <div className="fixed inset-x-0 bottom-0 z-modal-elevated flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
+        <div className="w-full max-w-[400px] bg-white dark:bg-slate-950 rounded-t-[2.5rem] shadow-2xl animate-slide-up pointer-events-auto flex flex-col max-h-[92vh] md:relative md:rounded-2xl md:max-w-md md:max-h-[85vh]">
           {/* Drag handle — mobile only */}
           <div className="flex justify-center pt-3 pb-1 shrink-0 md:hidden">
             <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full" />
@@ -56,13 +64,19 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
             <h2 className="text-slate-900 dark:text-white text-lg font-bold">Edit Profile</h2>
             <button
               className={[
-                'text-sm font-bold transition-colors',
-                canSave ? 'text-primary-brand' : 'text-slate-300 cursor-not-allowed',
+                'text-sm font-bold transition-colors flex items-center gap-1',
+                canSave && !isSaving ? 'text-primary-brand' : 'text-slate-300 cursor-not-allowed',
               ].join(' ')}
               onClick={handleSave}
-              disabled={!canSave}
+              disabled={!canSave || isSaving}
             >
-              Save
+              {isSaving ? (
+                <span className="material-symbols-outlined text-base animate-spin">
+                  progress_activity
+                </span>
+              ) : (
+                'Save'
+              )}
             </button>
           </div>
 
@@ -73,8 +87,11 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
               {/* Cover photo */}
               <label className="block cursor-pointer">
                 <input type="file" accept="image/*" className="sr-only" />
-                <div className="h-28 w-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center flex items-center justify-center group hover:bg-slate-300 transition-colors">
-                  <div className="size-10 rounded-full bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                <div
+                  className="h-28 w-full bg-cover bg-center flex items-center justify-center group hover:brightness-90 transition-all"
+                  style={{ backgroundImage: `url('${mockUser.coverUrl}')` }}
+                >
+                  <div className="size-10 rounded-full bg-black/40 flex items-center justify-center group-hover:bg-black/60 transition-colors">
                     <span className="material-symbols-outlined text-white text-xl">
                       photo_camera
                     </span>
@@ -87,8 +104,11 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
               <div className="absolute -bottom-8 left-6">
                 <label className="block cursor-pointer relative">
                   <input type="file" accept="image/*" className="sr-only" />
-                  <div className="h-20 w-20 rounded-full border-4 border-white bg-slate-300 flex items-center justify-center group hover:bg-slate-400 transition-colors overflow-hidden">
-                    <div className="size-8 rounded-full bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                  <div
+                    className="h-20 w-20 rounded-full border-4 border-white dark:border-slate-950 bg-cover bg-center flex items-center justify-center group hover:brightness-90 transition-all overflow-hidden"
+                    style={{ backgroundImage: `url('${mockUser.avatarUrl}')` }}
+                  >
+                    <div className="size-8 rounded-full bg-black/40 flex items-center justify-center group-hover:bg-black/60 transition-colors">
                       <span className="material-symbols-outlined text-white text-base">
                         photo_camera
                       </span>
@@ -148,13 +168,22 @@ export function EditProfileModal({ profileData, onSave, onClose }: EditProfileMo
           </div>
 
           {/* Sticky save button */}
-          <div className="shrink-0 p-4 bg-gradient-to-t from-white via-white/90 to-transparent">
+          <div className="shrink-0 p-4 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-slate-950 dark:via-slate-950/90 dark:to-transparent">
             <button
-              className="w-full h-14 bg-primary-brand hover:bg-primary-brand/90 text-white font-bold rounded-xl shadow-lg shadow-primary-brand/30 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+              className="w-full h-14 bg-primary-brand hover:bg-primary-brand/90 text-white font-bold rounded-xl shadow-lg shadow-primary-brand/30 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
               onClick={handleSave}
-              disabled={!canSave}
+              disabled={!canSave || isSaving}
             >
-              Save Changes
+              {isSaving ? (
+                <>
+                  <span className="material-symbols-outlined text-xl animate-spin">
+                    progress_activity
+                  </span>
+                  Saving...
+                </>
+              ) : (
+                'Save Changes'
+              )}
             </button>
           </div>
 

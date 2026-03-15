@@ -134,8 +134,12 @@ const timelineLineBase =
 
 const timelineLineLast = 'relative z-10'
 
+// Starter endorsement counts per item index (mock data)
+const MOCK_ENDORSEMENT_COUNTS = [12, 8]
+
 function ExperienceEntry({
   item,
+  itemIndex,
   isLast,
   onSelect,
   isMenuOpen,
@@ -143,12 +147,24 @@ function ExperienceEntry({
   onMenuClose,
 }: {
   item: ExperienceItem
+  itemIndex: number
   isLast: boolean
   onSelect: () => void
   isMenuOpen: boolean
   onMenuToggle: (e: React.MouseEvent) => void
   onMenuClose: () => void
 }) {
+  const [endorsed, setEndorsed] = useState(false)
+  const [endorseCount, setEndorseCount] = useState(MOCK_ENDORSEMENT_COUNTS[itemIndex] ?? 5)
+
+  function handleEndorse(e: React.MouseEvent) {
+    e.stopPropagation()
+    if (!endorsed) {
+      setEndorsed(true)
+      setEndorseCount(c => c + 1)
+    }
+  }
+
   return (
     <div className="relative flex gap-4">
       {/* ── Left column: 64×64 logo + vertical connector ── */}
@@ -170,7 +186,7 @@ function ExperienceEntry({
 
       {/* ── Right column: elevated card ── */}
       <div
-        className="flex-1 min-w-0 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden mb-2 cursor-pointer hover:shadow-md transition-shadow"
+        className="flex-1 min-w-0 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden mb-2 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
         onClick={onSelect}
       >
         {/* Card header */}
@@ -207,12 +223,40 @@ function ExperienceEntry({
 
         {/* Description */}
         {item.description && (
-          <div className="px-4 pb-4 border-t border-slate-50 dark:border-slate-800 pt-3">
+          <div className="px-4 pb-3 border-t border-slate-50 dark:border-slate-800 pt-3">
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed line-clamp-3">
               {item.description}
             </p>
           </div>
         )}
+
+        {/* ── Endorse action bar (Layer 4 peer trust) ── */}
+        <div className="px-4 pb-4 pt-2 flex items-center gap-3" onClick={e => e.stopPropagation()}>
+          <button
+            type="button"
+            onClick={handleEndorse}
+            disabled={endorsed}
+            className={[
+              'inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border transition-all duration-200',
+              endorsed
+                ? 'bg-cyan-50 dark:bg-cyan-900/20 border-cyan-200 dark:border-cyan-800 text-cyan-600 dark:text-cyan-400 cursor-default'
+                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-cyan-300 hover:text-cyan-600 dark:hover:border-cyan-700 dark:hover:text-cyan-400',
+            ].join(' ')}
+          >
+            <span className="material-symbols-outlined text-[13px]">
+              {endorsed ? 'thumb_up' : 'thumb_up'}
+            </span>
+            {endorsed ? 'Endorsed' : '+ Endorse'}
+          </button>
+          <span className="text-[11px] text-slate-400 dark:text-slate-500 font-semibold">
+            {endorseCount} endorsements
+          </span>
+          {endorsed && (
+            <span className="text-[9px] font-black bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 px-1.5 py-0.5 rounded">
+              L4
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -268,9 +312,16 @@ function CertificationCard({
 
   return (
     <div
-      className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow flex flex-col"
+      className="relative bg-white dark:bg-slate-900 border border-primary-brand/20 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
       onClick={onSelect}
     >
+      {/* "Active" status pill — absolute top-right corner */}
+      {cert.status && (
+        <div className="absolute top-3 right-3 z-10">
+          <StatusPill status={cert.status} />
+        </div>
+      )}
+
       {/* ── Gradient header with large centered seal ── */}
       <div
         className={`relative bg-gradient-to-b ${theme.gradient} dark:from-slate-800/80 dark:to-transparent px-4 pt-5 pb-4 flex flex-col items-center`}
@@ -288,7 +339,7 @@ function CertificationCard({
           )}
         </div>
 
-        {/* Credential ID watermark */}
+        {/* Credential ID in monospace — printed serial number feel */}
         {cert.credentialId && (
           <p className="mt-2 text-[9px] font-mono text-slate-400 dark:text-slate-600 tracking-wider">
             {cert.credentialId}
@@ -298,10 +349,8 @@ function CertificationCard({
 
       {/* ── Card body ── */}
       <div className="px-4 pb-4 flex-1 flex flex-col">
-        {/* Status pill + 3-dots */}
-        <div className="flex items-center justify-between mb-2">
-          {cert.status ? <StatusPill status={cert.status} /> : <span /> /* spacer */}
-          {/* Task 4: 3-dots menu preserved */}
+        {/* 3-dots menu row */}
+        <div className="flex items-center justify-end mb-2">
           <OverflowMenu isOpen={isMenuOpen} onToggle={onMenuToggle} onClose={onMenuClose} />
         </div>
 
@@ -353,6 +402,7 @@ function CertificationCard({
 interface CareerTimelineProps {
   experience: ExperienceItem[]
   certifications: Certification[]
+  onAddCredential?: () => void
 }
 
 export function CareerTimeline({ experience, certifications }: CareerTimelineProps) {
@@ -365,16 +415,21 @@ export function CareerTimeline({ experience, certifications }: CareerTimelinePro
       {/* ── Experience & Affiliations ── */}
       <div className="px-4 py-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight">
-            Experience &amp; Affiliations
-          </h2>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl">
+              work
+            </span>
+            <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight">
+              Experience &amp; Affiliations
+            </h2>
+          </div>
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-primary-brand/10 text-primary-brand flex items-center justify-center hover:bg-primary-brand/20 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary-brand/10 text-primary-brand text-sm font-bold hover:bg-primary-brand/20 transition-colors"
             onClick={() => setIsAddOpen(true)}
-            aria-label="Add experience"
           >
-            <span className="material-symbols-outlined text-sm">add</span>
+            <span className="material-symbols-outlined text-[16px]">add</span>
+            Add Experience
           </button>
         </div>
 
@@ -383,6 +438,7 @@ export function CareerTimeline({ experience, certifications }: CareerTimelinePro
             <ExperienceEntry
               key={item.id}
               item={item}
+              itemIndex={i}
               isLast={i === experience.length - 1}
               onSelect={() => setSelectedItem(item)}
               isMenuOpen={activeMenuId === item.id}
@@ -399,21 +455,26 @@ export function CareerTimeline({ experience, certifications }: CareerTimelinePro
       {/* ── Licenses & Certifications ── */}
       <div className="px-4 py-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight">
-            Licenses &amp; Certifications
-          </h2>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl">
+              workspace_premium
+            </span>
+            <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight">
+              Licenses &amp; Certifications
+            </h2>
+          </div>
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-primary-brand/10 text-primary-brand flex items-center justify-center hover:bg-primary-brand/20 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary-brand/10 text-primary-brand text-sm font-bold hover:bg-primary-brand/20 transition-colors"
             onClick={() => setIsAddOpen(true)}
-            aria-label="Add certification"
           >
-            <span className="material-symbols-outlined text-sm">add</span>
+            <span className="material-symbols-outlined text-[16px]">add</span>
+            Add Cert
           </button>
         </div>
 
         {/* Task 3: side-by-side grid on md+ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {certifications.map((cert, i) => (
             <CertificationCard
               key={cert.id}

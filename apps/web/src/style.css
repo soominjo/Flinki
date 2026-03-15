@@ -97,3 +97,41 @@ body {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 .progress-ring { transform: rotate(-90deg); }
+
+/* ── Chevron bounce on hover ── */
+@keyframes chevron-bounce {
+  0%, 100% { transform: translateY(0); }
+  40%       { transform: translateY(3px); }
+  70%       { transform: translateY(-1px); }
+}
+.group:hover .chevron-bounce {
+  animation: chevron-bounce 0.45s ease-in-out;
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
+/* ── Confetti burst animation ── */
+@keyframes confetti-burst {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  70%  { opacity: 0.9; }
+  100% { transform: translate(var(--cx, 0px), var(--cy, -60px)) rotate(var(--cr, 360deg)) scale(0.15); opacity: 0; }
+}
+.confetti-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: confetti-burst 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}

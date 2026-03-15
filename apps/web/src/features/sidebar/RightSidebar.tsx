@@ -37,6 +37,62 @@ export function RightSidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-full sticky top-0 h-screen overflow-y-auto pt-8 pb-8 px-4 gap-6 border-l border-slate-200 dark:border-slate-800 no-scrollbar">
+      {/* ── Trust Credibility Widget ── */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-amber-500 text-[16px]">verified</span>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              Credibility Score
+            </h3>
+          </div>
+          <span className="text-[9px] font-black bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+            L6 Verified
+          </span>
+        </div>
+
+        {/* Stacked progress bar */}
+        <div className="h-3 rounded-full overflow-hidden flex mb-2">
+          <div
+            className="bg-gradient-to-r from-amber-400 to-emerald-500 transition-all duration-700"
+            style={{ width: '78%' }}
+            title="78% Verified Data"
+          />
+          <div className="bg-slate-200 dark:bg-slate-700 flex-1" title="22% Self-Reported" />
+        </div>
+
+        {/* Legend */}
+        <div className="flex items-center justify-between text-[10px] font-semibold mb-3">
+          <div className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-gradient-to-br from-amber-400 to-emerald-500 inline-block" />
+            <span className="text-slate-600 dark:text-slate-400">78% Verified Data</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 inline-block" />
+            <span className="text-slate-400 dark:text-slate-500">22% Self-Reported</span>
+          </div>
+        </div>
+
+        {/* Layer breakdown */}
+        <div className="flex gap-1">
+          {(
+            [
+              { label: 'L1', color: 'bg-slate-400', title: 'Self-Reported' },
+              { label: 'L2', color: 'bg-blue-400', title: 'Media' },
+              { label: 'L3', color: 'bg-violet-400', title: 'Device Data' },
+              { label: 'L4', color: 'bg-cyan-400', title: 'Peer Confirmed' },
+              { label: 'L5', color: 'bg-indigo-500', title: 'Institutional' },
+              { label: 'L6', color: 'bg-amber-500', title: 'Official Results' },
+            ] as const
+          ).map(({ label, color, title }) => (
+            <div key={label} className="flex-1 flex flex-col items-center gap-0.5" title={title}>
+              <div className={`w-full h-1.5 rounded-full ${color}`} />
+              <span className="text-[8px] font-black text-slate-400">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div
         role="button"
         tabIndex={0}

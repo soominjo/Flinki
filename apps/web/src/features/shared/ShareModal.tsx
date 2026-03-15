@@ -28,7 +28,6 @@ export interface ShareModalProps {
   onShowQRCode?: () => void
   onShareWhatsApp?: () => void
   onShareInstagram?: () => void
-  onShareStrava?: () => void
 }
 
 // ---------------------------------------------------------------------------
@@ -223,7 +222,6 @@ interface HighlightViewProps {
   onBack: () => void
   onShareWhatsApp?: () => void
   onShareInstagram?: () => void
-  onShareStrava?: () => void
 }
 
 function HighlightView({
@@ -233,7 +231,6 @@ function HighlightView({
   onBack,
   onShareWhatsApp,
   onShareInstagram,
-  onShareStrava,
 }: HighlightViewProps) {
   const [copied, setCopied] = useState(false)
 
@@ -347,7 +344,7 @@ function HighlightView({
         Share to Socials
       </p>
 
-      <div className="grid grid-cols-3 gap-2.5 mb-4">
+      <div className="grid grid-cols-2 gap-2.5 mb-4">
         <button
           type="button"
           onClick={onShareInstagram}
@@ -364,15 +361,6 @@ function HighlightView({
         >
           <span className="material-symbols-outlined text-[22px]">chat</span>
           WhatsApp
-        </button>
-
-        <button
-          type="button"
-          onClick={onShareStrava}
-          className="flex flex-col items-center gap-1.5 bg-orange-500 text-white rounded-2xl py-3.5 font-bold text-[11px] hover:opacity-90 active:scale-[0.97] transition-all shadow-md shadow-orange-500/20"
-        >
-          <span className="material-symbols-outlined text-[22px]">directions_run</span>
-          Strava
         </button>
       </div>
 
@@ -412,7 +400,6 @@ export function ShareModal({
   onShowQRCode,
   onShareWhatsApp,
   onShareInstagram,
-  onShareStrava,
 }: ShareModalProps) {
   const [modalView, setModalView] = useState<ShareModalView>('options')
   const [isExporting, setIsExporting] = useState(false)
@@ -451,13 +438,13 @@ export function ShareModal({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-backdrop"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Bottom sheet (mobile) / Centered dialog (desktop) */}
-      <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
+      <div className="fixed inset-x-0 bottom-0 z-modal flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
         <div className="w-full max-w-[400px] flex flex-col bg-white dark:bg-slate-900 rounded-t-[2.5rem] shadow-2xl animate-slide-up pointer-events-auto md:relative md:rounded-2xl md:max-w-md md:max-h-[90vh] md:overflow-y-auto">
           {/* Drag handle */}
           <div className="flex justify-center p-3 md:hidden">
@@ -679,7 +666,6 @@ export function ShareModal({
               onBack={() => setModalView('options')}
               onShareWhatsApp={onShareWhatsApp}
               onShareInstagram={onShareInstagram}
-              onShareStrava={onShareStrava}
             />
           )}
 

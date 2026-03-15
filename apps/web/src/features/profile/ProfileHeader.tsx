@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { UserProfile } from '../../lib/mockData'
-import { SettingsModal } from '../shared/SettingsModal'
+import { SettingsPage } from '../settings/SettingsPage'
 import { ImagePreviewModal } from '../shared/ImagePreviewModal'
 import type { ProfileData } from './EditProfileModal'
 
@@ -54,7 +54,7 @@ export function ProfileHeader({
       <header className="relative">
         {/* Cover Photo */}
         <div
-          className="h-44 w-full bg-slate-200 bg-cover bg-center cursor-pointer hover:opacity-90 transition-opacity"
+          className="h-56 md:h-64 w-full bg-slate-200 bg-cover bg-center cursor-pointer hover:opacity-90 transition-opacity"
           style={user.coverUrl ? { backgroundImage: `url('${user.coverUrl}')` } : undefined}
           onClick={() => setPreviewImage(user.coverUrl ?? null)}
           role="button"
@@ -173,7 +173,7 @@ export function ProfileHeader({
 
       {/* Settings modal */}
       {isSettingsOpen && (
-        <SettingsModal
+        <SettingsPage
           onClose={() => setIsSettingsOpen(false)}
           profileData={profileData}
           onSaveProfile={setProfileData}

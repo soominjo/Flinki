@@ -89,13 +89,13 @@ export function SettingsModal({ onClose, profileData, onSaveProfile }: SettingsM
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-backdrop"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Sheet / Dialog */}
-      <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
+      <div className="fixed inset-x-0 bottom-0 z-modal flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
         <div className="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-t-[2.5rem] shadow-2xl animate-slide-up pointer-events-auto md:relative md:rounded-2xl md:max-w-sm md:h-auto">
           {/* Drag handle — mobile only */}
           <div className="flex justify-center pt-3 pb-1 md:hidden">

@@ -45,7 +45,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         // Flinki brand colors (from reference designs)
-        "primary-brand": "#451bc0",
+        "primary-brand": "#8563EB",
         "accent-blue": "#3b82f6",
         "accent-green": "#22c55e",
         "background-light": "#f6f6f8",
@@ -72,6 +72,34 @@ export default {
       animation: {
         "slide-up":    "slideUp 300ms cubic-bezier(0.32, 0.72, 0, 1)",
         "tab-content": "tabContentIn 300ms ease-out",
+      },
+      transitionTimingFunction: {
+        // iOS-style deceleration curve — used for all slide panels
+        panel: "cubic-bezier(0.32, 0.72, 0, 1)",
+      },
+      transitionDelay: {
+        // Backdrop on close: slight delay so the panel visually clears first
+        "backdrop-out": "40ms",
+      },
+      // ---------------------------------------------------------------------------
+      // Z-index tokens — use these instead of raw numbers so layers never clash.
+      //
+      //  sidebar        20   left nav rail / mobile bottom bar
+      //  dropdown       30   contextual menus, inline popovers
+      //  backdrop       40   modal scrim layers
+      //  modal          50   standard bottom-sheet / dialog panels
+      //  modal-elevated 60   panels that sit above their own separate scrim
+      //  viewer        100   full-screen media (image / story viewer)
+      //  overlay       200   highest-priority dialogs (credential detail, etc.)
+      // ---------------------------------------------------------------------------
+      zIndex: {
+        sidebar:         '20',
+        dropdown:        '30',
+        backdrop:        '40',
+        modal:           '50',
+        'modal-elevated': '60',
+        viewer:          '100',
+        overlay:         '200',
       },
     },
   },

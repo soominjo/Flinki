@@ -131,13 +131,13 @@ export function NotificationsModal({ onClose }: NotificationsModalProps) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-modal"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Sheet / Dialog */}
-      <div className="fixed inset-x-0 bottom-0 z-[60] flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
+      <div className="fixed inset-x-0 bottom-0 z-modal-elevated flex justify-center pointer-events-none md:inset-0 md:items-center md:justify-center">
         <div className="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-t-[2.5rem] shadow-2xl animate-slide-up pointer-events-auto flex flex-col max-h-[92vh] md:relative md:rounded-2xl md:max-w-md md:max-h-[85vh]">
           {/* Drag handle — mobile only */}
           <div className="flex justify-center pt-3 pb-1 shrink-0 md:hidden">
